@@ -1,0 +1,11 @@
+.el-table thead{
+    color: #262626;
+}
+.el-table{
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.el-link{
+    font-size: 12px;
+}
