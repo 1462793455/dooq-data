@@ -49,7 +49,7 @@ public class ViewController {
 
     /**
      * 查询视图列表
-     * TODO 可以增加分页以及筛选
+     * TODO 筛选
      */
     @GetMapping("/view_list")
     public DataResult<List<ViewVO>> viewList(){

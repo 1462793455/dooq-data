@@ -50,7 +50,7 @@ public class ViewManagerImpl implements ViewManager {
             // 插入数据
             int insertCount = viewMapper.insert(param);
             // 返回插入结果
-            return DataResult.createSuccess(insertCount > 0 ? true :false);
+            return DataResult.createSuccess(insertCount > 0);
         } catch (Exception e){
             log.error("ViewManagerImpl#createView",e);
             return DataResult.createDBError();
@@ -82,7 +82,7 @@ public class ViewManagerImpl implements ViewManager {
             // 修改
             int updateCount = viewMapper.updateById(param);
             // 返回修改结果
-            return DataResult.createSuccess(updateCount > 0 ? true : false);
+            return DataResult.createSuccess(updateCount > 0);
         }catch (Exception e){
             log.error("ViewManagerImpl#updateView",e);
             return DataResult.createDBError();
@@ -141,7 +141,7 @@ public class ViewManagerImpl implements ViewManager {
         try{
             // 删除
             int deleteCount = viewMapper.deleteById(viewId);
-            return DataResult.createSuccess(deleteCount > 0 ? true : false);
+            return DataResult.createSuccess(deleteCount > 0);
         } catch (Exception e){
             log.error("ViewManagerImpl#removeView",e);
             return DataResult.createDBError();
@@ -173,7 +173,7 @@ public class ViewManagerImpl implements ViewManager {
     @Override
     public DataResult<List<ViewVO>> selectAllView() {
         // 查询
-        List<ViewDO> views = viewMapper.selectList(new QueryWrapper<ViewDO>());
+        List<ViewDO> views = viewMapper.selectList(new QueryWrapper<>());
         // 没有找到
         if(views == null || views.size() <= 0){
             return DataResult.createSuccess();

@@ -2,7 +2,7 @@ package cc.dooq.data.controller;
 
 import cc.dooq.data.dto.*;
 import cc.dooq.data.entity.DataSourceDO;
-import cc.dooq.data.entity.DataSourceDataDO;
+import cc.dooq.data.entity.DataSourcePropertyDO;
 import cc.dooq.data.service.DataSourceService;
 import cc.dooq.data.util.DataResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -59,32 +59,32 @@ public class DataSourceController {
     /**
      * 查询数据源下的所有属性
      */
-    @GetMapping("/get_data_source_data_list")
-    public DataResult<List<DataSourceDataDO>> getDataSourceDataList(@RequestParam(value = "dataSourceId") Long dataSourceId){
+    @GetMapping("/get_data_source_property_list")
+    public DataResult<List<DataSourcePropertyDO>> getDataSourcePropertyList(@RequestParam(value = "dataSourceId") Long dataSourceId){
         return DataResult.createSuccess();
     }
 
     /**
      * 向指定数据源添加一个属性
      */
-    @PostMapping("/create_data_source_data")
-    public DataResult<Boolean> createDataSourceData(@RequestBody DataSourceDataCreateDTO param){
+    @PostMapping("/create_data_source_property")
+    public DataResult<Boolean> createDataSourceProperty(@RequestBody DataSourcePropertyCreateDTO param){
         return DataResult.createSuccess();
     }
 
     /**
      * 修改数据源下某个属性的信息
      */
-    @PostMapping("/update_data_source_data")
-    public DataResult<Boolean> updateDataSourceData(@RequestBody DataSourceDataUpdateDTO param){
+    @PostMapping("/update_data_source_property")
+    public DataResult<Boolean> updateDataSourceProperty(@RequestBody DataSourcePropertyUpdateDTO param){
         return DataResult.createSuccess();
     }
 
     /**
      * 删除指定数据源下的某个属性
      */
-    @PostMapping("/remove_data_source_data")
-    public DataResult<Boolean> removeDataSourceData(@RequestParam("sourceDataId") Long sourceDataId){
+    @PostMapping("/remove_data_source_property")
+    public DataResult<Boolean> removeDataSourceProperty(@RequestParam("propertyDataId") Long propertyId){
         return DataResult.createSuccess();
     }
 

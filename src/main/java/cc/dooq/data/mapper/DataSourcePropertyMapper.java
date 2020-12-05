@@ -1,6 +1,6 @@
 package cc.dooq.data.mapper;
 
-import cc.dooq.data.entity.DataSourceDataDO;
+import cc.dooq.data.entity.DataSourcePropertyDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author jobob
  * @since 2020-12-03
  */
-public interface DataSourceDataMapper extends BaseMapper<DataSourceDataDO> {
+public interface DataSourcePropertyMapper extends BaseMapper<DataSourcePropertyDO> {
 
 }

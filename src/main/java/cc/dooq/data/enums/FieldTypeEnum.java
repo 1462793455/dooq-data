@@ -7,7 +7,6 @@ package cc.dooq.data.enums;
  */
 public enum FieldTypeEnum {
 
-
     RADIO("单选项",1,true),
     CHECKBOX("多选项",2,true),
     NUMBER("数字项",3),

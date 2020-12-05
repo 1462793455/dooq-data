@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -18,8 +19,8 @@ import java.time.LocalDateTime;
  * @since 2020-12-03
  */
 @Data
-@TableName("t_data_source_data")
-public class DataSourceDataDO implements Serializable {
+@TableName("t_data_source_property")
+public class DataSourcePropertyDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,20 +29,20 @@ public class DataSourceDataDO implements Serializable {
 
     private Integer status;
 
-    private LocalDateTime createDate;
+    private Date createDate;
 
-    private LocalDateTime updateDate;
+    private Date updateDate;
 
     private Long dataSourceId;
 
-    private String sourceName;
+    private String propertyName;
 
-    private String sourceKey;
+    private String propertyKey;
 
     /**
-     * 数据源背景色
+     * 属性背景色
      */
-    private Integer sourceColorId;
+    private Integer propertyColorId;
 
     /**
      * 排序

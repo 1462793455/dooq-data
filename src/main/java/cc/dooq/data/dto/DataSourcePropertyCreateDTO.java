@@ -11,16 +11,16 @@ import java.io.Serializable;
  * @date 2020/12/3 18:48
  */
 @Data
-public class DataSourceDataCreateDTO implements Serializable {
+public class DataSourcePropertyCreateDTO implements Serializable {
 
     /** 数据源Id */
     private Integer dataSourceId;
 
     /** 数据源数据名称 */
-    private String sourceName;
+    private String propertyName;
 
     /** 数据源数据背景色 */
-    private ColorDataEnum sourceColorId;
+    private ColorDataEnum propertyColorId;
 
     /** 排序 */
     private Integer order;

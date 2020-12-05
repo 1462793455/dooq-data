@@ -75,7 +75,7 @@ public class DataSourceManagerImpl implements DataSourceManager {
 
             // 插入
             int insertCount = dataSourceMapper.insert(param);
-            return DataResult.createSuccess(insertCount > 0 ? true : false);
+            return DataResult.createSuccess(insertCount > 0);
         }catch (Exception e){
             log.error("DataSourceManagerImpl#createDataSource",e);
             return DataResult.createDBError();
@@ -105,7 +105,7 @@ public class DataSourceManagerImpl implements DataSourceManager {
             int updateCount = dataSourceMapper.updateById(param);
 
             // 返回结果
-            return DataResult.createSuccess(updateCount > 0 ? true : false);
+            return DataResult.createSuccess(updateCount > 0);
         }catch (Exception e){
             log.error("DataSourceManagerImpl#updateDataSource",e);
             return DataResult.createSuccess();
@@ -166,7 +166,7 @@ public class DataSourceManagerImpl implements DataSourceManager {
             int deleteCount = dataSourceMapper.deleteById(dataSourceId);
 
             // 返回结果
-            return DataResult.createSuccess(deleteCount > 0 ? true : false);
+            return DataResult.createSuccess(deleteCount > 0);
         }catch (Exception e){
             log.error("DataSourceManagerImpl#removeDataSource",e);
             return DataResult.createDBError();
@@ -179,12 +179,12 @@ public class DataSourceManagerImpl implements DataSourceManager {
      * @return DataResult 校验结果
      */
     private DataResult verifyRemoveDataSource(Long dataSourceId) {
-        // 视图ID 不允许为空
+        // 数据源ID 不允许为空
         if(dataSourceId == null){
             return DataResult.createError(DataResultCode.DATA_SOURCE_ID_IS_NULL_ERROR);
         }
 
-        // 检查该视图是否存在
+        // 检查该数据源是否存在
         DataSourceDO dataSourceInfo = dataSourceMapper.selectById(dataSourceId);
         // 数据源不存在，删除失败
         if(dataSourceInfo == null){
