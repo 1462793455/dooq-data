@@ -3,7 +3,9 @@ package cc.dooq.data.controller;
 import cc.dooq.data.dto.FieldCreateDTO;
 import cc.dooq.data.dto.FieldUpdateDTO;
 import cc.dooq.data.entity.FieldDO;
+import cc.dooq.data.service.FieldService;
 import cc.dooq.data.util.DataResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,12 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/api/field")
 public class FieldController {
 
+    @Autowired
+    private FieldService fieldService;
+
     /**
      * 向指定视图增加一个字段
     */
     @PostMapping("/create_view_field")
     public DataResult<Boolean> createViewField(@RequestBody FieldCreateDTO param){
-        return DataResult.createSuccess();
+        return fieldService.createViewField(param);
     }
 
     /**
@@ -28,7 +33,7 @@ public class FieldController {
      */
     @PostMapping("/remove_view_field")
     public DataResult<Boolean> removeViewField(@RequestParam("fieldId") Long fieldId){
-        return DataResult.createSuccess();
+        return fieldService.removeViewField(fieldId);
     }
 
     /**
@@ -36,7 +41,7 @@ public class FieldController {
      */
     @PostMapping("/update_view_field")
     public DataResult<Boolean> updateViewField(@RequestBody FieldUpdateDTO param){
-        return DataResult.createSuccess();
+        return fieldService.updateViewField(param);
     }
 
     /**
@@ -44,7 +49,7 @@ public class FieldController {
      */
     @GetMapping("/get_view_field_info")
     public DataResult<FieldDO> getViewFieldInfo(@RequestParam("fieldId") Long fieldId){
-        return DataResult.createSuccess();
+        return fieldService.getViewFieldInfo(fieldId);
     }
 
 }

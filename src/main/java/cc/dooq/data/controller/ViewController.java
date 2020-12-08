@@ -27,7 +27,7 @@ public class ViewController {
      * 创建新视图
     */
     @PostMapping("/create_view")
-    public DataResult<Boolean> createView(@RequestBody ViewCreateDTO param){
+    public DataResult<Long> createView(@RequestBody ViewCreateDTO param){
         return viewService.createView(param);
     }
 
@@ -49,7 +49,6 @@ public class ViewController {
 
     /**
      * 查询视图列表
-     * TODO 筛选
      */
     @GetMapping("/view_list")
     public DataResult<List<ViewVO>> viewList(){

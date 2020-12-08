@@ -5,21 +5,28 @@ import cc.dooq.data.dto.DataSourceCreateDTO;
 import cc.dooq.data.dto.DataSourceGetDTO;
 import cc.dooq.data.dto.PaginationDTO;
 import cc.dooq.data.entity.DataSourceDO;
+import cc.dooq.data.entity.FieldDO;
 import cc.dooq.data.entity.ViewDO;
 import cc.dooq.data.enums.DataStatusEnum;
 import cc.dooq.data.manager.DataSourceManager;
 import cc.dooq.data.mapper.DataSourceMapper;
+import cc.dooq.data.mapper.FieldMapper;
+import cc.dooq.data.mapper.ViewMapper;
 import cc.dooq.data.util.DataResult;
 import cc.dooq.data.util.DataResultCode;
 import cc.dooq.data.util.PageUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 蛋清
@@ -32,6 +39,12 @@ public class DataSourceManagerImpl implements DataSourceManager {
 
     @Autowired
     private DataSourceMapper dataSourceMapper;
+
+    @Autowired
+    private FieldMapper fieldMapper;
+
+    @Autowired
+    private ViewMapper viewMapper;
 
     @Override
     public DataResult<Page<DataSourceDO>> getDataSourceByName(DataSourceGetDTO param) {
@@ -189,6 +202,58 @@ public class DataSourceManagerImpl implements DataSourceManager {
         // 数据源不存在，删除失败
         if(dataSourceInfo == null){
             return DataResult.createError(DataResultCode.DATA_SOURCE_IS_NULL_ERROR);
+        }
+
+        // 检查当前是否有字段在用该数据源
+        List<FieldDO> dataSourceUseFieldInfo  = fieldMapper.selectList(new QueryWrapper<FieldDO>().eq("data_source_id", dataSourceId));
+        // 校验
+        DataResult verifyDataSoueceUseResult = verifyDataSoueceUse(dataSourceUseFieldInfo);
+        if(!verifyDataSoueceUseResult.isSuccess()){
+            return DataResult.createError(verifyDataSoueceUseResult);
+        }
+
+        // 校验成功
+        return DataResult.createSuccess();
+    }
+
+    /**
+     * 构建使用数据源字段、视图信息提示
+     * @param dataSourceUseFieldInfo
+     * @return DataResult
+    */
+    private DataResult verifyDataSoueceUse(List<FieldDO> dataSourceUseFieldInfo) {
+        // 没有正在使用的字段
+        if(dataSourceUseFieldInfo == null || dataSourceUseFieldInfo.isEmpty()){
+            return DataResult.createSuccess();
+        }
+
+        // 存在正在使用该数据源的字段时，需要提醒用户不可以删除  提示信息:  XX视图 》 XX字段 正在使用该数据源，无法删除！
+
+        // 存储提示字符串 视图名 》》 字段名
+        List<String> viewFieldInfo = new ArrayList<>();
+
+        // 循环
+        dataSourceUseFieldInfo.forEach(item -> {
+            String fieldName = item.getFieldName();
+            Long viewId = item.getViewId();
+            if(viewId != null){
+                ViewDO viewInfo = viewMapper.selectById(viewId);
+                if(viewInfo != null){
+                    String viewName = viewInfo.getViewName();
+                    viewFieldInfo.add(String.format(CommonConstants.DATA_SOURCE_EXIST_USE_NOT_REMOVE_MESSAGE_ITEM,viewName,fieldName));
+                }
+            }
+        });
+
+        // 如果 viewFieldInfo 是空的 代表字段确实存在，但是字段对应的视图 不存在，所以
+        if(!viewFieldInfo.isEmpty()){
+            StringBuffer stringBuffer = new StringBuffer();
+            viewFieldInfo.stream().forEach(item -> {
+                stringBuffer.append(item + ",");
+            });
+            // 需要的格式
+            String errorMsg = String.format(CommonConstants.DATA_SOURCE_EXIST_USE_NOT_REMOVE_MESSAGE,stringBuffer.substring(0, stringBuffer.length() - 1));
+            return DataResult.createError(DataResultCode.PARAM_ERROR.getErrCode(),errorMsg);
         }
 
         // 校验成功

@@ -12,6 +12,7 @@ import cc.dooq.data.mapper.FieldMapper;
 import cc.dooq.data.mapper.ViewMapper;
 import cc.dooq.data.util.DataResult;
 import cc.dooq.data.util.DataResultCode;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class FieldManagerImpl implements FieldManager {
     private DataResult verifyCreateField(FieldDO param) {
         // 啥都没有
         if(param == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.PARAM_ERROR);
         }
 
         // 视图ID不可为空，不可为不存在的视图
@@ -90,15 +91,20 @@ public class FieldManagerImpl implements FieldManager {
             return DataResult.createError(verifyFieldName);
         }
 
-        // 字段类型为枚举值时 数据源ID必填(字段类型不用校验，在controller已经校验过了)
+        // 字段类型为枚举值时 数据源ID必填
         FieldTypeEnum fieldTypeEnum = FieldTypeEnum.getFieldTypeEnum(param.getFieldType());
+        if(fieldTypeEnum == null){
+            return DataResult.createError(DataResultCode.FIELD_TYPE_IS_NULL_ERROR);
+        }
         // 枚举类型必填 数据源
-        if(fieldTypeEnum.getEnum() != null && fieldTypeEnum.getEnum()){
-            DataResult verifyDataSoueceResult = verifyDataSource(param.getDataSourceId());
-            if(!verifyDataSoueceResult.isSuccess()){
-                return DataResult.createError(verifyFieldName);
+        if(fieldTypeEnum.getEnum()){
+            DataResult verifyDataSourceResult = verifyDataSource(param.getDataSourceId());
+            if(!verifyDataSourceResult.isSuccess()){
+                return DataResult.createError(verifyDataSourceResult);
             }
         }
+
+        // 其他枚举不用校验，因为非必填并且一旦必填一定是枚举中的值
 
         // 校验成功
         return DataResult.createSuccess();
@@ -135,7 +141,7 @@ public class FieldManagerImpl implements FieldManager {
         // 字段描述，允许为空，如不为空时需要在 LONG_TEXT 范围内
         if(StringUtils.isNotBlank(fieldDesc) && (fieldDesc.length() > CommonConstants.LONG_TEXT_MAX_LENGTH
                 || fieldDesc.length() < CommonConstants.LONG_TEXT_MIN_LENGTH )){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.FIELD_LENGTH_OUT_MAX_ERROR);
         }
         // 校验成功
         return DataResult.createSuccess();
@@ -149,13 +155,19 @@ public class FieldManagerImpl implements FieldManager {
     private DataResult verifyFieldName(String fieldName) {
         // 为空时
         if(StringUtils.isBlank(fieldName)){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.FIELD_NAME_IS_NULL_ERROR);
         }
         // 字段名称长度校验
         int fieldNameLength = fieldName.length();
         if(fieldNameLength < CommonConstants.SHORT_TEXT_MIN_LENGTH
                 || fieldNameLength > CommonConstants.SHORT_TEXT_MAX_LENGTH){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.FIELD_NAME_LENGTH_OUT_ERROR);
+        }
+
+        // 字段名称相同校验
+        Integer fieldNameCount = fieldMapper.selectCount(new QueryWrapper<FieldDO>().eq("field_name", fieldName));
+        if(fieldNameCount > 0){
+            return DataResult.createError(DataResultCode.FIELD_NAME_EXIST_SAME_ERROR);
         }
 
         // 校验成功
@@ -211,14 +223,14 @@ public class FieldManagerImpl implements FieldManager {
     private DataResult verifyFieldId(Long fieldId) {
         // 字段 不允许为空
         if(fieldId == null){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.FIELD_ID_IS_NULL_ERROR);
         }
 
         // 检查该字段是否存在
         FieldDO fieldInfo = fieldMapper.selectById(fieldId);
         // 数据源不存在，删除失败
         if(fieldInfo == null){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.FIELD_IS_NULL_ERROR);
         }
 
         // 校验成功
@@ -259,7 +271,7 @@ public class FieldManagerImpl implements FieldManager {
     @Override
     public DataResult<FieldDO> getViewFieldInfo(Long fieldId) {
         if(fieldId == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.FIELD_ID_IS_NULL_ERROR);
         }
         return DataResult.createSuccess(fieldMapper.selectById(fieldId));
     }

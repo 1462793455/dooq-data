@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class DataSourcePropertyCreateDTO implements Serializable {
 
     /** 数据源Id */
-    private Integer dataSourceId;
+    private Long dataSourceId;
 
     /** 数据源数据名称 */
     private String propertyName;

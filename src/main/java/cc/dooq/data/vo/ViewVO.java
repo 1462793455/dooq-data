@@ -16,6 +16,6 @@ public class ViewVO implements Serializable {
     private String viewName;
     /** 视图描述 */
     private String viewDesc;
-
-
+    /** 视图ID */
+    private Long viewId;
 }

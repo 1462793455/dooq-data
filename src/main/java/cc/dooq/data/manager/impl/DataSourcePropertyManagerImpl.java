@@ -37,7 +37,7 @@ public class DataSourcePropertyManagerImpl implements DataSourcePropertyManager 
     public DataResult<List<DataSourcePropertyDO>> getDataSourcePropertyList(Long dataSourceId) {
         // 数据源ID 必填
         if(dataSourceId == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.DATA_SOURCE_ID_IS_NULL_ERROR);
         }
         try{
             return DataResult.createSuccess(
@@ -63,6 +63,9 @@ public class DataSourcePropertyManagerImpl implements DataSourcePropertyManager 
             param.setCreateDate(new Date());
             param.setStatus(DataStatusEnum.VALID.getStatus());
 
+            // TODO key 需要自行生成
+
+
             // 插入数据
             int insertCount = dataSourcePropertyMapper.insert(param);
             return DataResult.createSuccess(insertCount > 0);
@@ -81,7 +84,7 @@ public class DataSourcePropertyManagerImpl implements DataSourcePropertyManager 
 
         // 参数压根不存在
         if(param == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.PARAM_ERROR);
         }
 
         // 数据源ID ，校验是否存在
@@ -101,22 +104,22 @@ public class DataSourcePropertyManagerImpl implements DataSourcePropertyManager 
         String propertyName = param.getPropertyName();
         // 为空时
         if(StringUtils.isBlank(propertyName)){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.PROPERTY_NAME_IS_NULL_ERROR);
         }
         // 属性名称长度校验
         int propertyNameLength = propertyName.length();
         if(propertyNameLength < CommonConstants.SHORT_TEXT_MIN_LENGTH
                 || propertyNameLength > CommonConstants.SHORT_TEXT_MAX_LENGTH){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.PROPERTY_NAME_LENGTH_OUT_ERROR);
         }
 
-        // 检查是否存在相同的视图名称(这里只检查同数据源ID下相同，而不是全部中的相同)
+        // 检查是否存在相同的属性名称(这里只检查同数据源ID下相同，而不是全部中的相同)
         Integer samePropertyNameCount = dataSourcePropertyMapper.selectCount(
                 new QueryWrapper<DataSourcePropertyDO>()
                         .eq("property_name", propertyName)
                         .eq("data_source_id",dataSourceId));
         if(samePropertyNameCount != null && samePropertyNameCount > 0){
-            return DataResult.createError(DataResultCode.);
+            return DataResult.createError(DataResultCode.PROPERTY_NAME_EXIST_SAME_ERROR);
         }
 
         // 校验成功
@@ -153,13 +156,13 @@ public class DataSourcePropertyManagerImpl implements DataSourcePropertyManager 
 
         // 属性ID不允许为空
         if(propertyId == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.PROPERTY_ID_IS_NULL_ERROR);
         }
 
         // 检查数据是否存在
         DataSourcePropertyDO dataSourcePropertyInfo = dataSourcePropertyMapper.selectById(propertyId);
         if(dataSourcePropertyInfo == null){
-            return DataResult.createError();
+            return DataResult.createError(DataResultCode.PRPERTY_IS_NULL_ERROR);
         }
 
         // 校验成功

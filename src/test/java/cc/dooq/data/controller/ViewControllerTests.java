@@ -31,7 +31,6 @@ class CreateViewTest extends BaseTest {
         // 参数
         ViewCreateDTO viewCreate = new ViewCreateDTO();
         viewCreate.setViewName("测试视图名称");
-        viewCreate.setViewDesc("测试视图描述长度要够");
 
         // 发送请求
         response(this.mockMvc.perform(post("/v1/api/view/create_view")
@@ -96,7 +95,6 @@ class UpdateViewTest extends BaseTest {
         // 参数
         ViewUpdateDTO viewUpdate = new ViewUpdateDTO();
         viewUpdate.setViewId(1L);
-        viewUpdate.setViewDesc("描述描述描述描述");
         viewUpdate.setViewName("测试名称");
 
         // 发送请求
@@ -114,7 +112,6 @@ class UpdateViewTest extends BaseTest {
         // 参数
         ViewUpdateDTO viewUpdate = new ViewUpdateDTO();
         viewUpdate.setViewId(1L);
-        viewUpdate.setViewDesc("描述描述描述描述");
         viewUpdate.setViewName("测试名称测试名称测试名称测试名称测试名称测试名称测试名称测试名称测试名称");
 
         // 发送请求
@@ -132,7 +129,6 @@ class UpdateViewTest extends BaseTest {
         // 参数
         ViewUpdateDTO viewUpdate = new ViewUpdateDTO();
         viewUpdate.setViewId(1L);
-        viewUpdate.setViewDesc("描述描述描述描述");
         viewUpdate.setViewName("测");
 
         // 发送请求
@@ -150,7 +146,6 @@ class UpdateViewTest extends BaseTest {
         // 参数
         ViewUpdateDTO viewUpdate = new ViewUpdateDTO();
         viewUpdate.setViewId(1L);
-        viewUpdate.setViewDesc("描述");
         viewUpdate.setViewName("测三生三世搜索");
 
         // 发送请求
@@ -168,7 +163,6 @@ class UpdateViewTest extends BaseTest {
         // 参数
         ViewUpdateDTO viewUpdate = new ViewUpdateDTO();
         viewUpdate.setViewId(1L);
-        viewUpdate.setViewDesc("");
         viewUpdate.setViewName("测三生三世搜索");
 
         // 发送请求

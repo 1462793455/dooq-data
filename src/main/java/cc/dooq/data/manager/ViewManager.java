@@ -19,7 +19,7 @@ public interface ViewManager {
      * @param param
      * @return DataResult<Boolean>
      */
-    DataResult<Boolean> createView(ViewDO param);
+    DataResult<Long> createView(ViewDO param);
 
     /**
      * 删除指定视图

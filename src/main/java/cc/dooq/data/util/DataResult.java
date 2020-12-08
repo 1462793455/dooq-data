@@ -50,6 +50,10 @@ public class DataResult<Data> {
         return new DataResult(false,result.getErrCode(),result.getMessage(),null);
     }
 
+    public static <Data> DataResult<Data> createError(Integer errCode,String message){
+        return new DataResult(false,errCode,message,null);
+    }
+
     public static <Data> DataResult<Data> createDBError(){
         return new DataResult(false,DataResultCode.DATABASE_ERROR.getErrCode(),DataResultCode.DATABASE_ERROR.getMessage(),null);
     }

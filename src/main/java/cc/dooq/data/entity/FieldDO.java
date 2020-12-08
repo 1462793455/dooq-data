@@ -71,5 +71,9 @@ public class FieldDO implements Serializable {
      */
     private Integer fixed;
 
+    /**
+     * 字段颜色Code
+    */
+    private Integer fieldColor;
 
 }

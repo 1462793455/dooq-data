@@ -23,6 +23,18 @@ public enum DataResultCode {
     DATA_SOURCE_DESC_LENGTH_OUT_ERROR("数据源描述超出限制，请设置在 6~200 位字符内",10012),
     DATA_SOURCE_IS_NULL_ERROR("该数据源不存在",10013),
     DATA_SOURCE_ID_IS_NULL_ERROR("数据源ID不允许为空",10014),
+    FIELD_LENGTH_OUT_MAX_ERROR("字段描述超出限制，请设置在 6~200 位字符内",10015),
+    FIELD_NAME_IS_NULL_ERROR("字段名称不允许为空",10016),
+    FIELD_NAME_LENGTH_OUT_ERROR("字段名称超出限制，请设置在 3~20 位字符内",10017),
+    FIELD_ID_IS_NULL_ERROR("字段ID不允许为空",10018),
+    FIELD_IS_NULL_ERROR("字段不存在",10019),
+    PROPERTY_NAME_LENGTH_OUT_ERROR("属性名称超出限制，请设置在 3~20 位字符内",10020),
+    PROPERTY_NAME_EXIST_SAME_ERROR("该数据源下已存在相同的属性",10021),
+    PROPERTY_NAME_IS_NULL_ERROR("属性名称不允许为空",10022),
+    PROPERTY_ID_IS_NULL_ERROR("属性ID不允许为空",10023),
+    PRPERTY_IS_NULL_ERROR("该属性不存在",10024),
+    FIELD_TYPE_IS_NULL_ERROR("字段类型不可为空",10025),
+    FIELD_NAME_EXIST_SAME_ERROR("该视图中已存在相同的字段名称",10026),
     ;
 
     /** 错误提示 */

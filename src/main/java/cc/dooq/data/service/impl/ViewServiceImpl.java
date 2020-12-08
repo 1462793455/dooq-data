@@ -28,12 +28,11 @@ public class ViewServiceImpl implements ViewService {
     private ViewManager viewManager;
 
     @Override
-    public DataResult<Boolean> createView(ViewCreateDTO param) {
+    public DataResult<Long> createView(ViewCreateDTO param) {
         if(param == null){
             param = new ViewCreateDTO();
         }
         ViewDO viewDO = new ViewDO();
-        viewDO.setViewDesc(param.getViewDesc());
         viewDO.setViewName(param.getViewName());
         return viewManager.createView(viewDO);
     }
@@ -50,7 +49,6 @@ public class ViewServiceImpl implements ViewService {
         }
         ViewDO viewDO = new ViewDO();
         viewDO.setId(param.getViewId());
-        viewDO.setViewDesc(param.getViewDesc());
         viewDO.setViewName(param.getViewName());
         return viewManager.updateView(viewDO);
     }

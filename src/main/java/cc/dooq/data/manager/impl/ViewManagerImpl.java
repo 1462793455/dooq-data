@@ -33,7 +33,7 @@ public class ViewManagerImpl implements ViewManager {
     private ViewMapper viewMapper;
 
     @Override
-    public DataResult<Boolean> createView(ViewDO param) {
+    public DataResult<Long> createView(ViewDO param) {
         // 参数校验
         DataResult verifyResult = verifyViewInfoParam(param);
         // 校验失败则直接返回错误信息
@@ -50,7 +50,7 @@ public class ViewManagerImpl implements ViewManager {
             // 插入数据
             int insertCount = viewMapper.insert(param);
             // 返回插入结果
-            return DataResult.createSuccess(insertCount > 0);
+            return DataResult.createSuccess(param.getId());
         } catch (Exception e){
             log.error("ViewManagerImpl#createView",e);
             return DataResult.createDBError();
@@ -119,13 +119,6 @@ public class ViewManagerImpl implements ViewManager {
             return DataResult.createError(DataResultCode.VIEW_NAME_EXIST_SAME_ERROR);
         }
 
-        // 视图描述，允许为空，如不为空时需要在 LONG_TEXT 范围内
-        String viewDesc = param.getViewDesc();
-        if(StringUtils.isNotBlank(viewDesc) && (viewDesc.length() > CommonConstants.LONG_TEXT_MAX_LENGTH
-                || viewDesc.length() < CommonConstants.LONG_TEXT_MIN_LENGTH )){
-            return DataResult.createError(DataResultCode.VIEW_DESC_LENGTH_OUT_ERROR);
-        }
-
         // 返回校验成功
         return DataResult.createSuccess();
     }
@@ -183,6 +176,7 @@ public class ViewManagerImpl implements ViewManager {
         List<ViewVO> vos = views.stream().map(item -> {
             ViewVO viewVO = new ViewVO();
             BeanUtils.copyProperties(item, viewVO);
+            viewVO.setViewId(item.getId());
             return viewVO;
         }).collect(Collectors.toList());
 

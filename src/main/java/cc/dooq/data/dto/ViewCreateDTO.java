@@ -15,7 +15,4 @@ public class ViewCreateDTO implements Serializable {
     /** 视图名称 */
     private String viewName;
 
-    /** 视图描述 */
-    private String viewDesc;
-
 }

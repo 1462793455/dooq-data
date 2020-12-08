@@ -46,10 +46,10 @@ body{
 
 .header-button{
     font-size: 12px;
-    padding: 2px 4px;
+    padding: 3px 10px;
     color: #595959;
     height: 24px;
-    border-radius: 4px;
+    border-radius: 3px;
     cursor: pointer;
     user-select: none;
 }
@@ -60,4 +60,38 @@ body{
     transition: color,background-color 218ms;
 }
 
+.select-header-button{
+    background-color: #409EFF;
+    color: white;
+}
 
+.select-header-button:hover{
+    background-color: #3d92ee !important;
+    color: white!important;
+    transition: color,background-color 218ms;
+}
+
+.color-list-body{
+    display: flex;
+    justify-content: space-between;
+}
+
+.color-list-item{
+    background-color: rgb(230, 36, 18);
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: border-radius,width 218ms;
+}
+
+.color-list-item:hover{
+    border-radius: 4px;
+    width: 30px;
+    transition: border-radius,width 218ms;
+}
+
+.selectFieldColor{
+    border-radius: 4px;
+    width: 30px;
+}

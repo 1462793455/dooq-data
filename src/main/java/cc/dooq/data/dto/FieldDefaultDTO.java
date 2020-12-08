@@ -1,5 +1,6 @@
 package cc.dooq.data.dto;
 
+import cc.dooq.data.enums.ColorDataEnum;
 import cc.dooq.data.enums.FieldFixedEnum;
 import cc.dooq.data.enums.FieldTypeEnum;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class FieldDefaultDTO implements Serializable {
     private String fieldDesc;
 
     /** 数据源id，只有枚举类型时才会必填 */
-    private Integer dataSourceId;
+    private Long dataSourceId;
 
     /** 排序 */
     private Integer order;
@@ -35,4 +36,6 @@ public class FieldDefaultDTO implements Serializable {
     /** 是否固定 1:固定 0:不固定  默认不固定 */
     private FieldFixedEnum fixed;
 
+    /** 字段颜色 */
+    private ColorDataEnum fieldColor;
 }

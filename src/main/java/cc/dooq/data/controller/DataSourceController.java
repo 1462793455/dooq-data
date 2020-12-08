@@ -3,6 +3,7 @@ package cc.dooq.data.controller;
 import cc.dooq.data.dto.*;
 import cc.dooq.data.entity.DataSourceDO;
 import cc.dooq.data.entity.DataSourcePropertyDO;
+import cc.dooq.data.service.DataSourcePropertyService;
 import cc.dooq.data.service.DataSourceService;
 import cc.dooq.data.util.DataResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,6 +23,9 @@ public class DataSourceController {
 
     @Autowired
     private DataSourceService dataSourceService;
+
+    @Autowired
+    private DataSourcePropertyService dataSourcePropertyService;
 
     /**
      * 获取所有数据源列表，可通过 数据源名称筛选

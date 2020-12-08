@@ -1,0 +1,19 @@
+.data-source-header{
+    display: flex;
+    padding-bottom: 10px;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-source-header .el-input--mini .el-input__inner{
+    /*width: 120px;*/
+    height: 20px;
+}
+
+.data-source-header .el-input-group{
+    width: 155px;
+}
+
+.data-source-header  .el-input-group__append, .el-input-group__prepend{
+    padding: 0 12px;
+}

@@ -20,7 +20,7 @@ public interface ViewService {
      * @param param 视图参数
      * @return DataResult<Boolean> 结果
     */
-    DataResult<Boolean> createView(ViewCreateDTO param);
+    DataResult<Long> createView(ViewCreateDTO param);
 
     /**
      * 删除视图

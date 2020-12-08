@@ -35,7 +35,4 @@ public class ViewDO implements Serializable {
 
     private String viewName;
 
-    private String viewDesc;
-
-
 }
