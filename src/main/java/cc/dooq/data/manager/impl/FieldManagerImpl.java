@@ -12,13 +12,19 @@ import cc.dooq.data.mapper.FieldMapper;
 import cc.dooq.data.mapper.ViewMapper;
 import cc.dooq.data.util.DataResult;
 import cc.dooq.data.util.DataResultCode;
+import cc.dooq.data.vo.FieldInfoVO;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 蛋清
@@ -81,14 +87,14 @@ public class FieldManagerImpl implements FieldManager {
         }
 
         // 字段名称为小文本限制
-        DataResult verifyFieldName = verifyFieldName(param.getFieldName());
+        DataResult verifyFieldName = verifyFieldName(param.getFieldName(),param.getViewId());
         if(!verifyFieldName.isSuccess()){
             return DataResult.createError(verifyFieldName);
         }
         // 字段描述为大文本限制
         DataResult verifyFieldDesc = verifyFieldDesc(param.getFieldDesc());
         if(!verifyFieldDesc.isSuccess()){
-            return DataResult.createError(verifyFieldName);
+            return DataResult.createError(verifyFieldDesc);
         }
 
         // 字段类型为枚举值时 数据源ID必填
@@ -152,7 +158,7 @@ public class FieldManagerImpl implements FieldManager {
      * @param fieldName 字段名称
      * @return DataResult 校验结果
     */
-    private DataResult verifyFieldName(String fieldName) {
+    private DataResult verifyFieldName(String fieldName,Long viewId) {
         // 为空时
         if(StringUtils.isBlank(fieldName)){
             return DataResult.createError(DataResultCode.FIELD_NAME_IS_NULL_ERROR);
@@ -165,7 +171,8 @@ public class FieldManagerImpl implements FieldManager {
         }
 
         // 字段名称相同校验
-        Integer fieldNameCount = fieldMapper.selectCount(new QueryWrapper<FieldDO>().eq("field_name", fieldName));
+        Integer fieldNameCount = fieldMapper.selectCount(new QueryWrapper<FieldDO>().eq("field_name", fieldName)
+                .eq("view_id",viewId));
         if(fieldNameCount > 0){
             return DataResult.createError(DataResultCode.FIELD_NAME_EXIST_SAME_ERROR);
         }
@@ -220,7 +227,8 @@ public class FieldManagerImpl implements FieldManager {
     /**
      * 校验字段ID
     */
-    private DataResult verifyFieldId(Long fieldId) {
+    @Override
+    public DataResult<FieldDO> verifyFieldId(Long fieldId) {
         // 字段 不允许为空
         if(fieldId == null){
             return DataResult.createError(DataResultCode.FIELD_ID_IS_NULL_ERROR);
@@ -234,7 +242,7 @@ public class FieldManagerImpl implements FieldManager {
         }
 
         // 校验成功
-        return DataResult.createSuccess();
+        return DataResult.createSuccess(fieldInfo);
 
     }
 
@@ -269,10 +277,50 @@ public class FieldManagerImpl implements FieldManager {
     }
 
     @Override
-    public DataResult<FieldDO> getViewFieldInfo(Long fieldId) {
+    public DataResult<FieldDO> getFieldInfo(Long fieldId) {
         if(fieldId == null){
             return DataResult.createError(DataResultCode.FIELD_ID_IS_NULL_ERROR);
         }
         return DataResult.createSuccess(fieldMapper.selectById(fieldId));
+    }
+
+    @Override
+    public DataResult<ViewFieldInfoVO> getViewFieldInfo(Long viewId) {
+        // 参数校验
+        if(viewId == null){
+            return DataResult.createError(DataResultCode.VIEW_ID_IS_NULL_ERROR);
+        }
+
+        // 检查该视图是否存在
+        ViewDO viewInfo = viewMapper.selectById(viewId);
+        if(viewInfo == null){
+            return DataResult.createError(DataResultCode.VIEW_IS_NULL_ERROR);
+        }
+
+        // 查询该视图下的所有字段
+        List<FieldDO> fieldList =
+                fieldMapper.selectList(new QueryWrapper<FieldDO>().eq("view_id", viewInfo.getId()));
+
+        // 字段 VO 集合
+        List<FieldInfoVO> fieldInfos = new ArrayList<>();
+
+        // 有字段时 转换VO
+        if(fieldList != null){
+            fieldInfos = fieldList.stream().map(item -> {
+                FieldInfoVO fieldInfoVO = new FieldInfoVO();
+                BeanUtils.copyProperties(item, fieldInfoVO);
+                fieldInfoVO.setRendererName(FieldTypeEnum.getFieldTypeEnum(item.getFieldType()).getRendererName());
+                return fieldInfoVO;
+            }).collect(Collectors.toList());
+        }
+
+        // 组装 VO
+        ViewFieldInfoVO viewFieldInfo = new ViewFieldInfoVO();
+        viewFieldInfo.setFields(fieldInfos);
+        viewFieldInfo.setViewId(viewInfo.getId());
+        viewFieldInfo.setViewName(viewInfo.getViewName());
+
+        // 返回结果
+        return DataResult.createSuccess(viewFieldInfo);
     }
 }

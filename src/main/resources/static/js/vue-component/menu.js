@@ -41,12 +41,12 @@ function createTableHeaderMenu(isUpdate){
 function showTableMenu(menus){
 
     // 将传入的 menus 设置到变量中
-    globalVue.menus = menus;
+    vm.menus = menus;
 
     // 先隐藏菜单
-    globalVue.menuContextVisible = false;
+    vm.menuContextVisible = false;
     // 再展示
-    globalVue.menuContextVisible = true;
+    vm.menuContextVisible = true;
     //关闭浏览器右键默认事件
     event.preventDefault();
     // 找到菜单实例
@@ -75,7 +75,7 @@ function styleMenu(menuInstance) {
 // 处理
 function foo(){
     // 取消鼠标监听事件 菜单栏
-    globalVue.menuContextVisible = false;
+    vm.menuContextVisible = false;
     // 关掉监听
     document.removeEventListener('click', foo);
 }

@@ -35,6 +35,21 @@ public enum DataResultCode {
     PRPERTY_IS_NULL_ERROR("该属性不存在",10024),
     FIELD_TYPE_IS_NULL_ERROR("字段类型不可为空",10025),
     FIELD_NAME_EXIST_SAME_ERROR("该视图中已存在相同的字段名称",10026),
+    VIEW_NOT_LICIT_FIELD("该视图没有合法字段",10027),
+    FIELD_VERIFIER_IS_NULL("该字段类型不存在相应的参数校验组件",10028),
+    FIELD_TYPE_IS_NULL("字段类型不存在",10029),
+    FIELD_VALUE_DATE_FORMAT_ERROR("日期类型数据校验失败",10030),
+    FIELD_VALUE_DATE_TIME_FORMAT_ERROR("日期时间类型数据校验失败",10031),
+    FIELD_VALUE_NUMBER_FORMAT_ERROR("数字类型数据校验失败",10032),
+    FIELD_VALUE_TEXT_FORMAT_ERROR("短文本类型数据校验失败",10033),
+    FIELD_VALUE_TEXTAREA_FORMAT_ERROR("长文本类型数据校验失败",10034),
+    ROW_ID_IS_NULL_ERROR("行ID不可为空",10035),
+    ROW_NOT_EXIST_ERROR("行不存在",10036),
+    FIELD_NOT_UPDATE_DATE("没有可修改的数据",10037),
+    FILTER_CONDITION_NOT_NULL_ERROR("筛选条件不存在",10038),
+    PAGE_INFO_NOT_NULL_ERROR("分页数据错误",10039),
+    CONDITION_NOT_NULL_ERROR("条件不存在",10040),
+    CONDITION_INCOMPLETE_ERROR("条件参数不完整",10041),
     ;
 
     /** 错误提示 */

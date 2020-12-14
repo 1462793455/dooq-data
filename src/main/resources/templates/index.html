@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,15 +9,43 @@
     <link rel="stylesheet" href="/static/css/component-view.css">
     <link rel="stylesheet" href="/static/css/override.css">
     <link rel="stylesheet" href="/static/css/component-data-source.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table/lib/style.css">
+    <link rel="stylesheet" href="/static/css/external/vxe-table/style.css">
+    <link rel="stylesheet" href="/static/css/vxe-table-override.css">
 </head>
-<body onContextMenu="return false">
+<!--onContextMenu="return false"-->
+<body>
 <div style="opacity: 0" id="app">
 
-    <!--  全局右键菜单页面   -->
-    <el-dropdown-menu id="tableContextMenu" v-show="menuContextVisible">
-        <el-dropdown-item v-for="item in menus" @click="{{item.fun}}"><i :class="item.icon"></i>{{item.name}}</el-dropdown-item>
-    </el-dropdown-menu>
+    <!--  添加数据 dialog  -->
+    <el-dialog
+            :title="getEditModeStr() + '数据'"
+            :visible.sync="editDataDialog"
+            width="600px"
+            :before-close="editDataDialogClose">
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="editDataDialogClose">取 消</el-button>
+            <el-button type="primary" @click="editColumnData">{{ getEditModeStr() }}</el-button>
+        </span>
+        <div class="create-date-body">
+            <el-form size="mini" label-width="auto" label-position="right">
+                <div class="left-form-item">
+                    <el-form-item v-if="!item.system && index % 2 != 0" :label="item.title"
+                                  v-for="(item,index) in gridOptions.columns">
+                        {{ renderChild( $createElement, item ) }}
+                        <slot :name="item.field"></slot>
+                    </el-form-item>
+                </div>
+                <div class="right-form-item">
+                    <el-form-item v-if="!item.system && index % 2 == 0" :label="item.title"
+                                  v-for="(item,index) in gridOptions.columns">
+                        {{ renderChild( $createElement, item ) }}
+                        <slot :name="item.field"></slot>
+                    </el-form-item>
+                </div>
+
+            </el-form>
+        </div>
+    </el-dialog>
 
     <!--  添加数据源 dialog  -->
     <el-dialog
@@ -31,17 +59,15 @@
         </span>
         <el-form size="mini" label-position="top" label-width="80px">
             <el-form-item required="true" label="数据源名称">
-                <el-input v-model="fieldCreateInfo.fieldName" show-word-limit minlength="3" type="text" maxlength="30" placeholder="填写字段名称" ></el-input>
+                <el-input v-model="fieldCreateInfo.fieldName" show-word-limit minlength="3" type="text" maxlength="30"
+                          placeholder="填写字段名称"></el-input>
             </el-form-item>
             <el-form-item label="数据源描述">
-                <el-input v-model="fieldCreateInfo.fieldDesc" show-word-limit minlength="6" type="text" maxlength="200" placeholder="填写字段描述"></el-input>
+                <el-input v-model="fieldCreateInfo.fieldDesc" show-word-limit minlength="6" type="text" maxlength="200"
+                          placeholder="填写字段描述"></el-input>
             </el-form-item>
         </el-form>
         <el-divider content-position="left">添加属性</el-divider>
-
-
-
-
     </el-dialog>
 
     <!--  添加新字段 dialog  -->
@@ -52,17 +78,20 @@
             :before-close="handleClose">
         <el-form size="mini" label-position="top" label-width="80px">
             <el-form-item required="true" label="字段名称">
-                <el-input v-model="fieldCreateInfo.fieldName" show-word-limit minlength="3" type="text" maxlength="30" placeholder="填写字段名称" ></el-input>
+                <el-input v-model="fieldCreateInfo.fieldName" show-word-limit minlength="3" type="text" maxlength="30"
+                          placeholder="填写字段名称"></el-input>
             </el-form-item>
             <el-form-item label="字段描述">
-                <el-input v-model="fieldCreateInfo.fieldDesc" show-word-limit minlength="6" type="text" maxlength="200" placeholder="填写字段描述"></el-input>
+                <el-input v-model="fieldCreateInfo.fieldDesc" show-word-limit minlength="6" type="text" maxlength="200"
+                          placeholder="填写字段描述"></el-input>
             </el-form-item>
             <el-form-item required="true" label="字段类型">
                 <el-select value-key="fieldCode" v-model="fieldCreateInfo.fieldTypeInfo" placeholder="请选择字段类型">
                     <el-option v-for="item in fieldTypes" :label="item.fieldName" :value="item"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="fieldCreateInfo.fieldTypeInfo != null && fieldCreateInfo.fieldTypeInfo.isEnum == true" required="true" label="数据源">
+            <el-form-item v-if="fieldCreateInfo.fieldTypeInfo != null && fieldCreateInfo.fieldTypeInfo.isEnum == true"
+                          required="true" label="数据源">
                 <el-popover
                         placement="right-start"
                         title=""
@@ -77,12 +106,13 @@
                                 </el-input>
                             </div>
                             <div>
-                                <i @click="createDataSourceDialog = true" style="cursor: pointer;" class="el-icon-circle-plus-outline"></i>
+                                <i @click="createDataSourceDialog = true" style="cursor: pointer;"
+                                   class="el-icon-circle-plus-outline"></i>
                             </div>
                         </div>
                         <div class="data-source-content">
                             <div class="data-source-list view-list-context">
-<!--                                如果存在选中，则第一个就是-->
+                                <!--                                如果存在选中，则第一个就是-->
                                 <div class="data-source-item view-list-item select-view-style">
                                     <div class="view-list-item-left">
                                         <div>当前选中的数据源</div>
@@ -95,7 +125,7 @@
                                         </div>
                                     </div>
                                 </div>
-<!--                                如果存在选中，则这个列表中需要排除掉-->
+                                <!--                                如果存在选中，则这个列表中需要排除掉-->
                                 <div v-for="item in 5" class="data-source-item view-list-item ">
                                     <div class="view-list-item-left">
                                         <div>测试数据源{{item}}</div>
@@ -124,8 +154,8 @@
             </el-form-item>
             <el-form-item label="是否固定">
                 <el-radio-group v-model="fieldCreateInfo.fixed">
-                    <el-radio border :label="1" >固定</el-radio>
-                    <el-radio border :label="0" >不固定</el-radio>
+                    <el-radio border :label="1">固定</el-radio>
+                    <el-radio border :label="0">不固定</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>
@@ -174,8 +204,12 @@
                                         trigger="click">
                                     <i slot="reference" style="cursor: pointer" class="el-icon-circle-plus-outline"></i>
                                     <div>
-                                        <el-input ref="viewNameInputRef" show-word-limit minlength="3" type="text" maxlength="30" size="mini" v-model="viewNameStorage" placeholder="请输入视图名称" ></el-input>
-                                        <el-button @click="createView" style="margin-top: 7px;float: right;" type="primary" size="mini">创建</el-button>
+                                        <el-input ref="viewNameInputRef" show-word-limit minlength="3" type="text"
+                                                  maxlength="30" size="mini" v-model="viewNameStorage"
+                                                  placeholder="请输入视图名称"></el-input>
+                                        <el-button @click="createView" style="margin-top: 7px;float: right;"
+                                                   type="primary" size="mini">创建
+                                        </el-button>
                                     </div>
                                 </el-popover>
                             </div>
@@ -201,14 +235,22 @@
                                                         title="修改视图"
                                                         width="200"
                                                         trigger="hover">
-                                                    <el-dropdown-item slot="reference" ><i class="el-icon-edit"></i>修改视图名称 <i class="el-icon-arrow-right"></i></el-dropdown-item>
+                                                    <el-dropdown-item slot="reference"><i class="el-icon-edit"></i>修改视图名称
+                                                        <i class="el-icon-arrow-right"></i></el-dropdown-item>
                                                     <div>
-                                                        <el-input :ref="'viewNameUpdateInputRef' + index" show-word-limit minlength="3" type="text" maxlength="30" size="mini" v-model="viewNameStorage" placeholder="请输入视图名称" ></el-input>
-                                                        <el-button @click="updateView(item.viewId,index)" style="margin-top: 7px;float: right;" type="primary" size="mini">修改</el-button>
+                                                        <el-input :ref="'viewNameUpdateInputRef' + index"
+                                                                  show-word-limit minlength="3" type="text"
+                                                                  maxlength="30" size="mini" v-model="viewNameStorage"
+                                                                  placeholder="请输入视图名称"></el-input>
+                                                        <el-button @click="updateView(item.viewId,index)"
+                                                                   style="margin-top: 7px;float: right;" type="primary"
+                                                                   size="mini">修改
+                                                        </el-button>
                                                     </div>
                                                 </el-popover>
                                                 <el-popconfirm @confirm="removeView(item.viewId)" title="请再次确认删除操作!">
-                                                    <el-dropdown-item slot="reference"><i class="el-icon-coffee"></i>删除该视图</el-dropdown-item>
+                                                    <el-dropdown-item slot="reference"><i class="el-icon-coffee"></i>删除该视图
+                                                    </el-dropdown-item>
                                                 </el-popconfirm>
 
                                             </el-dropdown-menu>
@@ -221,23 +263,37 @@
                         </div>
                     </div>
                 </el-popover>
-                <!--       视图列表结束         -->
-                <el-button v-if="currSelectViewInfo != null" class="el-dropdown-link header-button" @click="createFieldDialogVisible = true" size="mini" icon="el-icon-circle-plus">添加新字段</el-button>
-
+                <!--       添加新字段 只有在选择好视图时才会展示         -->
+                <el-button v-if="currSelectViewInfo != null" class="el-dropdown-link header-button"
+                           @click="createFieldDialogVisible = true" size="mini" icon="el-icon-circle-plus">添加新字段
+                </el-button>
+                <!--      添加新数据，只有在当前视图存在字段时展示     -->
+                <el-button v-if="gridOptions.columns.length > 0" class="el-dropdown-link header-button"
+                           @click="checkEditMode(0)" size="mini" icon="el-icon-circle-plus">添加数据
+                </el-button>
             </div>
             <div>
-                <el-dropdown trigger="click">
-                    <span class="el-dropdown-link header-button">
+                <el-popover
+                        placement="bottom-end"
+                        width="280"
+                        trigger="click">
+                    <span slot="reference" class="el-dropdown-link header-button">
                         筛选<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>黄金糕</el-dropdown-item>
-                        <el-dropdown-item>狮子头</el-dropdown-item>
-                        <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                        <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                        <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+
+                    <div class="data-filter-view">
+                        <div class="" v-for="(item,index) in gridOptions.columns">
+                            {{ renderFilter( $createElement, item ) }}
+                            <slot :name="item.field"></slot>
+                        </div>
+                    </div>
+
+                    <el-row style="margin-top: 10px;border-top: 1px solid aliceblue;padding-top: 15px;justify-content: flex-end;">
+                        <el-button @click="filterColumnDate" type="primary" style="float: right" size="mini">筛选</el-button>
+                        <el-button  style="float: right;margin-right: 5px" size="mini">重置</el-button>
+                    </el-row>
+
+                </el-popover>
                 <el-dropdown trigger="click">
                     <span class="el-dropdown-link header-button">
                         <i class="el-icon-arrow-down el-icon-more"></i>
@@ -250,60 +306,26 @@
             </div>
         </div>
     </div>
-<!--clientHeight - 105-->
+    <!--clientHeight - 105-->
     <div class="main-view">
         <div class="main-warp">
-            <el-table
-                    @row-contextmenu="rightClick"
-                    @header-contextmenu="tableHeaderContextMenu"
-                    @row-click="test1"
-                    :data="tableData"
-                    border
-                    stripe
-                    :height="clientHeight - 105"
-                    style="width: 100%">
-<!--                没有任何列时-->
-                <el-table-column
-                        type="selection"
-                        width="40">
-                </el-table-column>
-
-                <el-table-column
-                        prop="tag"
-                        label="标签"
-                        width="100"
-                        :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-                        :filter-method="filterTag"
-                        filter-placement="bottom-end">
-                    <template slot-scope="scope">
-                        <el-tag
-                                :type="scope.row.tag === '家' ? 'primary' : 'success'"
-                                disable-transitions>{{scope.row.tag}}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                没有任何列时不展示
-                <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="130">
-                    <template slot-scope="scope">
-                        <el-link :underline="false" type="primary">查看</el-link>
-                        <el-link :underline="false" type="primary">编辑</el-link>
-                        <el-link :underline="false" type="primary">修改行色</el-link>
-                        <el-link :underline="false" type="danger">删除</el-link>
-                    </template>
-                </el-table-column>
-            </el-table>
+            <vxe-grid :max-height="clientHeight - 105" ref="xGrid" v-bind="gridOptions">
+                <!-- 操作列-->
+                <template v-slot:operate>
+                    <el-link :underline="false" type="primary">查看</el-link>
+                    <el-link :underline="false" type="primary">编辑</el-link>
+                    <el-link :underline="false" type="danger">删除</el-link>
+                </template>
+            </vxe-grid>
         </div>
     </div>
 
     <div class="footer-view">
         <div class="footer-warp">
             <div>
-                <el-button type="success" plain size="small">新增数据</el-button>
-                <el-button type="primary" plain size="small">修改行色</el-button>
-                <el-button type="danger" plain size="small">删除</el-button>
+                <!--                <el-button type="success" plain size="small">新增数据</el-button>-->
+                <!--                <el-button type="primary" plain size="small">修改行色</el-button>-->
+                <!--                <el-button type="danger" plain size="small">删除</el-button>-->
             </div>
             <div>
                 <el-pagination
@@ -319,14 +341,16 @@
 </div>
 </body>
 <!-- import Vue before Element -->
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="/static/js/external/vue/vue.js"></script>
+<!-- table renderers -->
+<script src="/static/js/table/renderers.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <!-- jquery -->
-<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="/static/js/external/jquery/jquery.min.js"></script>
 <!-- vxe-table -->
-<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
-<script src="https://cdn.jsdelivr.net/npm/vxe-table"></script>
+<script src="/static/js/external/vxe-table/xe-utils.js"></script>
+<script src="/static/js/external/vxe-table/vxe-table.js"></script>
 <!-- 基础变量以及方法js -->
 <script src="/static/js/base.js"></script>
 <!-- view 相关 api -->
@@ -347,10 +371,12 @@
 <script src="/static/js/api/field-request.js"></script>
 <!-- 字段 api -->
 <script src="/static/js/vue-component/entity/fieldInfo.js"></script>
+<!-- data api -->
+<script src="/static/js/api/date-request.js"></script>
 <script>
 
     // Vue 全局实例
-    var globalVue = null;
+    var vm = null;
 
     // 创建 Vue 实例
     new Vue({

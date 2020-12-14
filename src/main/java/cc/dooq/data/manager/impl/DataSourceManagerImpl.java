@@ -57,15 +57,15 @@ public class DataSourceManagerImpl implements DataSourceManager {
         param.setPageSize(1);
 
         // 获取分页信息
-        DataResult<Page> pageInfoResult = PageUtil.page(param);
+        DataResult<Page<DataSourceDO>> pageInfoResult = PageUtil.page(param, new DataSourceDO());
         if(!pageInfoResult.isSuccess()){
             return DataResult.createError(pageInfoResult);
         }
         // 分页查询
-        Page page = dataSourceMapper.selectPage(
+        Page<DataSourceDO> page = dataSourceMapper.selectPage(
                 pageInfoResult.getData(),
                 new QueryWrapper<DataSourceDO>()
-                .like(StringUtils.isNotBlank(param.getDataSourceName()),"source_name",param.getDataSourceName()));
+                        .like(StringUtils.isNotBlank(param.getDataSourceName()), "source_name", param.getDataSourceName()));
 
         // 返回结果
         return DataResult.createSuccess(page);

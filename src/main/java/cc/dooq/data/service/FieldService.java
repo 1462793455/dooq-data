@@ -4,6 +4,7 @@ import cc.dooq.data.dto.FieldCreateDTO;
 import cc.dooq.data.dto.FieldUpdateDTO;
 import cc.dooq.data.entity.FieldDO;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -35,10 +36,17 @@ public interface FieldService {
     DataResult<Boolean> updateViewField(FieldUpdateDTO param);
 
     /**
-     * 获取字段详细信息
+     * 获取单个字段详细信息
      * @param fieldId
      * @return DataResult<FieldDO>
      */
-    DataResult<FieldDO> getViewFieldInfo(Long fieldId);
+    DataResult<FieldDO> getFieldInfo(Long fieldId);
+
+    /**
+     * 查询该视图下所有字段信息
+     * @param viewId 视图ID
+     * @return DataResult<ViewFieldInfoVO>
+     */
+    DataResult<ViewFieldInfoVO> getViewFieldInfo(Long viewId);
 
 }

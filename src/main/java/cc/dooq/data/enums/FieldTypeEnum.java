@@ -1,5 +1,6 @@
 package cc.dooq.data.enums;
 
+
 /**
  * @author 蛋清
  * @Description: 字段类型枚举
@@ -7,14 +8,15 @@ package cc.dooq.data.enums;
  */
 public enum FieldTypeEnum {
 
-    RADIO("单选项",1,true),
-    CHECKBOX("多选项",2,true),
-    NUMBER("数字项",3),
-    TEXT("文本项",4),
-    TEXTAREA("文本域",5),
-    URL("超链接",6),
-    DATE("日期",7),
-    DATE_TIME("日期时间",8),
+//    RADIO("单选项",1,true),
+//    CHECKBOX("多选项",2,true),
+    NUMBER(3,"数字项","custom-number"),
+    TEXT(4,"文本项","custom-text"),
+    TEXTAREA(5,"文本域","custom-textarea"),
+//    URL(6,"超链接"),
+    DATE(7,"日期","custom-date"),
+//    TIME(8,"时间","custom-time"),
+    DATE_TIME(9,"日期时间","custom-date-time"),
     ;
 
     /**
@@ -41,15 +43,31 @@ public enum FieldTypeEnum {
     private Integer fieldCode;
     /** 是否为枚举类型 */
     private Boolean isEnum;
+    /** 前端 \ 后端 {@link FieldProcessor} 字段处理器名称 */
+    private String rendererName;
 
-    FieldTypeEnum(String fieldName, Integer fieldCode, Boolean isEnum) {
+    FieldTypeEnum(Integer fieldCode,String fieldName, Boolean isEnum, String rendererName) {
+        this.fieldName = fieldName;
+        this.fieldCode = fieldCode;
+        this.isEnum = isEnum;
+        this.rendererName = rendererName;
+    }
+
+    FieldTypeEnum(Integer fieldCode,String fieldName, String rendererName) {
+        this.fieldName = fieldName;
+        this.fieldCode = fieldCode;
+        this.rendererName = rendererName;
+        this.isEnum = false;
+    }
+
+    FieldTypeEnum(Integer fieldCode,String fieldName, Boolean isEnum) {
         this.fieldName = fieldName;
         this.fieldCode = fieldCode;
         this.isEnum = isEnum;
     }
 
-    FieldTypeEnum(String fieldName, Integer fieldCode) {
-        this(fieldName,fieldCode,false);
+    FieldTypeEnum(Integer fieldCode,String fieldName) {
+        this(fieldCode,fieldName,false);
     }
 
     public String getFieldName() {
@@ -75,4 +93,14 @@ public enum FieldTypeEnum {
     public void setEnum(Boolean anEnum) {
         isEnum = anEnum;
     }
+
+    public String getRendererName() {
+        return rendererName;
+    }
+
+    public void setRendererName(String rendererName) {
+        this.rendererName = rendererName;
+    }
+
+
 }

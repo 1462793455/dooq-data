@@ -15,5 +15,5 @@ var SHORT_TEXT_MIN_LENGTH = 3;
 /** 长文本最长长度限制 常用于描述等场景*/
 var  LONG_TEXT_MAX_LENGTH = 300;
 
-/** 长文本最长长度限制 常用于描述等场景*/
+/** 长文本最短长度限制 常用于描述等场景*/
 var LONG_TEXT_MIN_LENGTH = 6;

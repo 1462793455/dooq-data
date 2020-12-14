@@ -3,6 +3,7 @@ package cc.dooq.data.service;
 import cc.dooq.data.dto.ViewCreateDTO;
 import cc.dooq.data.dto.ViewUpdateDTO;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import cc.dooq.data.vo.ViewVO;
 import org.springframework.web.bind.annotation.RequestBody;
 

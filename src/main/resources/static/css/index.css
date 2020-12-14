@@ -95,3 +95,29 @@ body{
     border-radius: 4px;
     width: 30px;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.render-view{
+    width: 275px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px 10px;
+}
+
+.render-view .el-input{
+    width: 115px;
+}
+
+.filter-body{
+    display: flex;
+    flex-direction: column;
+}
+

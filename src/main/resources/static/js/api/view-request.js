@@ -8,7 +8,7 @@ function getViews(success){
             if(SUCCESS_CODE == res.errCode && res.data != null){
                 success && success(res.data);
             } else {
-                globalVue.$notify({
+                vm.$notify({
                     title: '获取视图失败',
                     message: res.message,
                     type: 'error'
@@ -32,7 +32,7 @@ function createViewInfo(viewName,success){
             if(SUCCESS_CODE == res.errCode && res.data != null){
                 success && success(res.data);
             } else {
-                globalVue.$notify({
+                vm.$notify({
                     title: '新增视图失败',
                     message: res.message,
                     type: 'error'
@@ -55,7 +55,7 @@ function updateViewName(viewId,viewName,success){
             if(SUCCESS_CODE == res.errCode){
                 success && success();
             } else {
-                globalVue.$notify({
+                vm.$notify({
                     title: '修改视图失败',
                     message: res.message,
                     type: 'error'
@@ -76,7 +76,7 @@ function removeViewByViewId(viewId,success){
             if(SUCCESS_CODE == res.errCode){
                 success && success();
             } else {
-                globalVue.$notify({
+                vm.$notify({
                     title: '删除视图失败',
                     message: res.message,
                     type: 'error'

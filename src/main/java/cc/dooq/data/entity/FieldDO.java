@@ -59,7 +59,7 @@ public class FieldDO implements Serializable {
     /**
      * 排序
      */
-    private Integer order;
+    private Integer orderDesc;
 
     /**
      * 字段宽度

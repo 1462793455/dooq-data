@@ -61,7 +61,7 @@ public class ViewManagerImpl implements ViewManager {
     public DataResult<Boolean> updateView(ViewDO param) {
 
         // 视图ID 不可为空
-        DataResult verifyIdResult = verifyRemoveView(param.getId());
+        DataResult verifyIdResult = verifyViewValid(param.getId());
         // 校验失败则直接返回错误信息
         if(!verifyIdResult.isSuccess()){
             return DataResult.createError(verifyIdResult);
@@ -126,7 +126,7 @@ public class ViewManagerImpl implements ViewManager {
     @Override
     public DataResult<Boolean> removeView(Long viewId) {
         // 参数校验
-        DataResult verifyResult = verifyRemoveView(viewId);
+        DataResult verifyResult = verifyViewValid(viewId);
         if(!verifyResult.isSuccess()){
             return DataResult.createError(verifyResult);
         }
@@ -142,11 +142,12 @@ public class ViewManagerImpl implements ViewManager {
     }
 
     /**
-     * 校验 RemoveView 方法参数
+     * 校验 视图ID 是否指向可用的视图(该方法在其他 Manager 也在用，所以声明 public)
      * @param viewId 视图ID
      * @return DataResult 校验结果
     */
-    private DataResult verifyRemoveView(Long viewId) {
+    @Override
+    public DataResult verifyViewValid(Long viewId) {
         // 视图ID 不允许为空
         if(viewId == null){
             return DataResult.createError(DataResultCode.VIEW_ID_IS_NULL_ERROR);

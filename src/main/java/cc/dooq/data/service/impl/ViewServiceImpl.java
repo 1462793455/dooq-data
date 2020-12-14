@@ -9,6 +9,7 @@ import cc.dooq.data.manager.ViewManager;
 import cc.dooq.data.mapper.ViewMapper;
 import cc.dooq.data.service.ViewService;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import cc.dooq.data.vo.ViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

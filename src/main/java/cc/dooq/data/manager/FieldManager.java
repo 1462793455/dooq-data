@@ -4,6 +4,7 @@ import cc.dooq.data.dto.FieldCreateDTO;
 import cc.dooq.data.dto.FieldUpdateDTO;
 import cc.dooq.data.entity.FieldDO;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,5 +41,20 @@ public interface FieldManager {
      * @param fieldId
      * @return DataResult<FieldDO>
     */
-    DataResult<FieldDO> getViewFieldInfo(@RequestParam("fieldId") Long fieldId);
+    DataResult<FieldDO> getFieldInfo(@RequestParam("fieldId") Long fieldId);
+
+    /**
+     * 查询该视图下所有字段信息
+     * @param viewId 视图ID
+     * @return DataResult<ViewFieldInfoVO>
+     */
+    DataResult<ViewFieldInfoVO> getViewFieldInfo(Long viewId);
+
+    /**
+     * 校验 FieldId 是否有效
+     * @param fieldId 字段ID
+     * @return 校验结果
+    */
+    DataResult<FieldDO> verifyFieldId(Long fieldId);
+
 }

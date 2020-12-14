@@ -5,6 +5,7 @@ import cc.dooq.data.dto.FieldUpdateDTO;
 import cc.dooq.data.entity.FieldDO;
 import cc.dooq.data.service.FieldService;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,9 +48,16 @@ public class FieldController {
     /**
      * 查询字段信息详细信息
      */
-    @GetMapping("/get_view_field_info")
-    public DataResult<FieldDO> getViewFieldInfo(@RequestParam("fieldId") Long fieldId){
-        return fieldService.getViewFieldInfo(fieldId);
+    @GetMapping("/get_field_info")
+    public DataResult<FieldDO> getFieldInfo(@RequestParam("fieldId") Long fieldId){
+        return fieldService.getFieldInfo(fieldId);
     }
 
+    /**
+     * 查询视图字段信息
+     */
+    @GetMapping("/get_view_field_info")
+    public DataResult<ViewFieldInfoVO> getViewFieldInfo(@RequestParam(value = "viewId",required = true) Long viewId){
+        return fieldService.getViewFieldInfo(viewId);
+    }
 }

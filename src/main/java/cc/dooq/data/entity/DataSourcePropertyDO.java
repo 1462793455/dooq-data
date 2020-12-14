@@ -44,10 +44,6 @@ public class DataSourcePropertyDO implements Serializable {
      */
     private Integer propertyColorId;
 
-    /**
-     * 排序
-     */
-    private Integer order;
 
 
 }

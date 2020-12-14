@@ -22,9 +22,6 @@ public class DataSourcePropertyCreateDTO implements Serializable {
     /** 数据源数据背景色 */
     private ColorDataEnum propertyColorId;
 
-    /** 排序 */
-    private Integer order;
-
     /** private String sourceKey; 数据源数据Key 该值后台随机生成一串可以使用的就行，不用输入 */
 
 }

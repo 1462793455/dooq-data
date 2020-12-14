@@ -7,6 +7,7 @@ import cc.dooq.data.entity.FieldDO;
 import cc.dooq.data.manager.FieldManager;
 import cc.dooq.data.service.FieldService;
 import cc.dooq.data.util.DataResult;
+import cc.dooq.data.vo.ViewFieldInfoVO;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class FieldServiceImpl implements FieldService {
     public DataResult<Boolean> createViewField(FieldCreateDTO param) {
         FieldDO fieldDO = buildField(param);
         if(param.getFieldType() != null){
-            fieldDO.setFieldType(param.getFieldType().getFieldCode());
+            fieldDO.setFieldType(param.getFieldType());
         }
         // 调用逻辑
         return fieldManager.createViewField(fieldDO);
@@ -57,7 +58,7 @@ public class FieldServiceImpl implements FieldService {
         fieldDO.setFieldWidth(param.getFieldWidth());
         fieldDO.setViewId(param.getViewId());
         fieldDO.setDataSourceId(param.getDataSourceId());
-        fieldDO.setOrder(param.getOrder());
+        fieldDO.setOrderDesc(param.getOrderDesc());
         if(param.getFieldColor() != null){
             fieldDO.setFieldColor(param.getFieldColor().getCode());
         }
@@ -68,7 +69,13 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public DataResult<FieldDO> getViewFieldInfo(Long fieldId) {
-        return fieldManager.getViewFieldInfo(fieldId);
+    public DataResult<FieldDO> getFieldInfo(Long fieldId) {
+        return fieldManager.getFieldInfo(fieldId);
     }
+
+    @Override
+    public DataResult<ViewFieldInfoVO> getViewFieldInfo(Long viewId) {
+        return fieldManager.getViewFieldInfo(viewId);
+    }
+
 }

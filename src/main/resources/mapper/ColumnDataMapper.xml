@@ -2,4 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.dooq.data.mapper.ColumnDataMapper">
 
+    <select id="selectColumnDataRowIdList" resultType="long">
+        select
+            row_id,
+            number
+        from
+            (
+                SELECT
+                    row_id,
+                    (if(
+                        <foreach separator="or" collection="fieldList" item="fieldId">
+                            field_id = #{fieldId}
+                        </foreach>
+                    ,1,0) +
+                    if(
+                        <foreach separator="or" collection="conditionList" item="value">
+                            ( ${value} )
+                        </foreach>
+                    ,1,0)) as number
+                from
+                    t_column_data
+                where
+                    view_id = #{viewId}
+            ) as column_data
+        where number >= ${fieldList.size + conditionList.size}
+        limit #{param4.pageNumber},#{param4.pageSize}
+
+    </select>
+
+
+    <select id="selectColumnDataRowIdCount" resultType="long">
+        select
+        count(row_id)
+        from
+        (
+        SELECT
+        row_id,
+        (if(
+            <foreach separator="or" collection="fieldList" item="fieldId">
+                field_id = #{fieldId}
+            </foreach>
+        ,1,0) +
+        if(
+        <foreach separator="or" collection="conditionList" item="value">
+            ( ${value} )
+        </foreach>
+        ,1,0)) as number
+        from
+        t_column_data
+        where view_id = #{viewId}
+        ) as column_data
+        where number >= ${fieldList.size + conditionList.size}
+    </select>
+
 </mapper>

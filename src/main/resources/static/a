@@ -1,0 +1,40 @@
+
+                { type: 'checkbox', title: '', width: 120 },
+
+
+                // 支持多种 单元格类型 比如说 文本、长文本、日期
+                // 每种类型都有单独的 编辑格式(editRender) 展示格式(cellRender)
+
+                // 前后端统一设定支持的类型 后端提供校验 前端提供展示和提交
+
+                // 不同类型有不同类型的处理器 如 text:{editRender:()=>{return xx;},xx,xx}
+                // https://xuliangzhan_admin.gitee.io/vxe-table/#/table/renderer/edit 支持自定义 编辑框 所以 日期、超链接等都是可以定制的
+
+
+                { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
+                {
+                    field: 'role',
+                    title: 'Role',
+                    sortable: true,
+                    filters: [
+                        { label: '前端开发', value: '前端' },
+                        { label: '后端开发', value: '后端' },
+                        { label: '测试', value: '测试' },
+                        { label: '程序员鼓励师', value: '程序员鼓励师' }
+                    ],
+                    filterMultiple: false,
+                    editRender: { name: 'input' }
+                },
+                { field: 'email', title: '时间', width: 160, editRender: { name: 'custom-time' } },
+                { field: 'email1', title: '数字', width: 160, editRender: { name: 'custom-number' } },
+                { field: 'nickname', title: '长文本', editRender: { name: 'custom-textarea' } },
+                { field: 'email', title: '时间', width: 160, editRender: { name: 'custom-time' } },
+                { field: 'nickname1', title: '短文本', editRender: { name: 'custom-text' } },
+                { field: 'nickname2', title: '日期', editRender: { name: 'custom-date' } },
+                { field: 'nickname3', title: '日期时间', editRender: { name: 'custom-date-time' } },
+                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [{ label: '前端开发', value: '前端' }] } },
+                { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+                { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
+                { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
+                { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
+

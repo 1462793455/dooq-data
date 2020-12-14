@@ -21,6 +21,6 @@ public class ViewFieldInfoVO implements Serializable {
     private Long viewId;
 
     /** 字段信息 */
-    private List<FieldDO> fields;
+    private List<FieldInfoVO> fields;
 
 }

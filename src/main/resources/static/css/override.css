@@ -34,19 +34,49 @@
     padding: 10px 20px;
 }
 
-/*.el-table__body-wrapper::after{*/
-/*    content: '1. 点击 “视图列表”右上角 “+”号，进行新建视图 \A 2. 点击 “添加新字段”为该视图新建字段 \A 3. 点击“新增数据”为该视图新增数据 \A 4. 开始游戏';*/
-/*    margin: 100px auto;*/
-/*    white-space: pre;*/
-/*    display: block;*/
-/*    text-align: center;*/
-/*    font-size: 18px;*/
-/*    line-height: 2;*/
-/*    color: #a6a6a6;*/
-/*}*/
+.el-button + .el-button {
+    margin-left: 0px;
+}
 
-.el-table__body-wrapper{
-    background-image: linear-gradient(90deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%);
-    background-size: 20px 20px;
-    background-position: center center;
+.create-date-body .el-form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.custom-form-item{
+
+}
+
+.left-form-item{
+    width: 42%;
+}
+
+.right-form-item{
+    width: 42%;
+}
+
+.el-input-number--mini{
+    width: 100%!important;
+}
+
+.number-filter-body .el-form-item{
+    margin-right: 0px;
+    width: 110px;
+}
+
+.text-filter-body .el-form-item__content{
+    width: 100%;
+}
+
+.filter-body .el-form-item{
+    margin-bottom: 10px;
+}
+
+.filter-body .el-form-item__label{
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6e6e6e;
+    line-height: 30px;
 }

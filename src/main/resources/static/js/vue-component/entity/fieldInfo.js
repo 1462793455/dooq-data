@@ -19,5 +19,5 @@ function getFieldInfo(){
 
 // 重置
 function resetFieldCreateInfo(){
-    globalVue.fieldCreateInfo = getFieldInfo();
+    vm.fieldCreateInfo = getFieldInfo();
 }

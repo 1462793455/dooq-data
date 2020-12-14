@@ -1,0 +1,21 @@
+.vxe-table{
+    /*height: 100%;*/
+    /*background-image: linear-gradient(90deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%);*/
+    /*background-size: 20px 20px;*/
+    /*background-position: center center;*/
+}
+
+/*.vxe-body--column .vxe-cell{*/
+/*    padding: 0 0;*/
+/*}*/
+
+.vxe-body--column .vxe-cell{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    max-height: 200px!important;
+}
+
+
+.vxe-cell .el-input-number,.el-date-editor{
+    width: 100%!important;
+}

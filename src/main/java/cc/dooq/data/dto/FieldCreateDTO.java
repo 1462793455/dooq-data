@@ -12,6 +12,6 @@ import lombok.Data;
 public class FieldCreateDTO extends FieldDefaultDTO {
 
     /** 字段类型 单选、多选等 */
-    private FieldTypeEnum fieldType;
+    private Integer fieldType;
 
 }

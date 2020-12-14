@@ -55,14 +55,4 @@ public class ViewController {
         return viewService.selectAllView();
     }
 
-    /**
-     * 查询视图字段信息
-     * TODO 还没有
-    */
-    @GetMapping("/field_info")
-    public DataResult<ViewFieldInfoVO> getViewFieldInfo(Long viewId){
-        return DataResult.createSuccess();
-    }
-
-
 }

@@ -33,7 +33,6 @@ public class DataSourcePropertyServiceImpl implements DataSourcePropertyService 
             param = new DataSourcePropertyCreateDTO();
         }
         DataSourcePropertyDO dataSourcePropertyDO = new DataSourcePropertyDO();
-        dataSourcePropertyDO.setOrder(param.getOrder());
         dataSourcePropertyDO.setDataSourceId(param.getDataSourceId());
         dataSourcePropertyDO.setPropertyName(param.getPropertyName());
         if(param.getPropertyColorId() != null){
@@ -55,7 +54,6 @@ public class DataSourcePropertyServiceImpl implements DataSourcePropertyService 
         }
         DataSourcePropertyDO dataSourcePropertyDO = new DataSourcePropertyDO();
         dataSourcePropertyDO.setId(param.getPropertyId());
-        dataSourcePropertyDO.setOrder(param.getOrder());
         dataSourcePropertyDO.setDataSourceId(param.getDataSourceId());
         dataSourcePropertyDO.setPropertyName(param.getPropertyName());
         if(param.getPropertyColorId() != null){

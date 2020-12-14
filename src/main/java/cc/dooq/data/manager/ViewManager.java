@@ -40,4 +40,9 @@ public interface ViewManager {
      * @return DataResult<List<ViewVO>>
     */
     DataResult<List<ViewVO>> selectAllView();
+
+    /**
+     * 工具方法，对外提供服务
+    */
+    DataResult verifyViewValid(Long viewId);
 }

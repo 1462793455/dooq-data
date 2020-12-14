@@ -4,6 +4,8 @@ import cc.dooq.data.constants.CommonConstants;
 import cc.dooq.data.dto.PaginationDTO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 /**
  * @author 蛋清
  * @Description:
@@ -14,7 +16,7 @@ public class PageUtil {
     /**
      * 获取分页 Page 对象
     */
-    public static DataResult<Page> page(PaginationDTO pagination){
+    public static <T> DataResult<Page<T>> page(PaginationDTO pagination,T t){
         // 检查并返回正确结果
         DataResult<PaginationDTO> defaultPaginationResult = getDefaultPagination(pagination);
         if(!defaultPaginationResult.isSuccess()){
@@ -23,7 +25,7 @@ public class PageUtil {
         // 获得 分页信息
         PaginationDTO defaultPage = defaultPaginationResult.getData();
         // 生成并返回
-        Page objectPage = new Page<>(defaultPage.getPageNumber(), defaultPage.getPageSize());
+        Page<T> objectPage = new Page<T>(defaultPage.getPageNumber(), defaultPage.getPageSize());
         objectPage.setSearchCount(true);
         // 返回
         return DataResult.createSuccess(objectPage);
@@ -56,4 +58,78 @@ public class PageUtil {
         return DataResult.createSuccess(pagination);
     }
 
+    /**
+     * 当前页
+     *
+     * @param curPage
+     * @return
+     */
+    public static Integer curPage(Integer curPage) {
+        if (null == curPage) {
+            curPage = 1;
+        }
+        return curPage <= 0 ? 1 : curPage;
+    }
+
+    /**
+     * 每页大小
+     *
+     * @param pageSize
+     * @return
+     */
+    public static Integer pageSize(Integer pageSize) {
+        if (null == pageSize) {
+            pageSize = CommonConstants.DEFAULT_PAGE_SIZE;
+        }
+        return pageSize < CommonConstants.MIN_PAGE_SIZE || pageSize > CommonConstants.MAX_PAGE_SIZE ? CommonConstants.DEFAULT_PAGE_SIZE : pageSize;
+    }
+
+    /**
+     * 分页起始位置计算
+     * @param curPage 页码
+     * @param pageSize 页大小
+    */
+    public static Integer getStart(Integer curPage, Integer pageSize) {
+        if (null == curPage) {
+            curPage = 1;
+        }
+        if (null == pageSize) {
+            pageSize = CommonConstants.DEFAULT_PAGE_SIZE;
+        }
+        return (curPage(curPage) - 1) * pageSize(pageSize);
+    }
+
+
+    /**
+     * 重置 page 结果集
+    */
+    public static <T> Page<T> resetPageData(Page target,List<T> records){
+
+        // 直接赋值
+        Page<T> sourcePage = target;
+        sourcePage.setRecords(records);
+
+        // 返回
+        return sourcePage;
+    }
+
+
+    /**
+     * 组装 page 参数
+     * @param pageInfo 分页信息
+     * @return 返回组装好的完善的 Page Info
+    */
+    public static PaginationDTO assemblyPage(PaginationDTO pageInfo) {
+        // 不存在就赋值
+        if(pageInfo == null){
+            return new PaginationDTO(1,20);
+        }
+
+        // 检查 pageInfo 参数，并修改成可以分页的参数
+        pageInfo.setPageSize(PageUtil.pageSize(pageInfo.getPageSize()));
+        pageInfo.setPageNumber(PageUtil.getStart(pageInfo.getPageNumber(),pageInfo.getPageSize()));
+
+        // 返回结果
+        return pageInfo;
+    }
 }

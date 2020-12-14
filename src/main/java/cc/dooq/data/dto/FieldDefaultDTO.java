@@ -28,7 +28,7 @@ public class FieldDefaultDTO implements Serializable {
     private Long dataSourceId;
 
     /** 排序 */
-    private Integer order;
+    private Integer orderDesc;
 
     /** 字段宽度 */
     private Integer fieldWidth;
