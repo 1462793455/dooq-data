@@ -19,5 +19,18 @@ function getFieldInfo(){
 
 // 重置
 function resetFieldCreateInfo(){
-    vm.fieldCreateInfo = getFieldInfo();
+
+    // 得到默认信息
+    let fieldInfo = getFieldInfo();
+
+    // 字段类型信息
+    let fieldTypeInfo = vm.fieldCreateInfo.fieldTypeInfo;
+
+    // 接着用刚才设置好的值
+    if(fieldTypeInfo){
+        fieldInfo["fieldTypeInfo"] = fieldTypeInfo;
+    }
+
+    // 重置
+    vm.fieldCreateInfo = fieldInfo;
 }

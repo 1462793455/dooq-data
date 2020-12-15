@@ -75,9 +75,6 @@ function updateData(viewId,rowId,fields,success){
 
 // 获取数据
 function getColumnData(options,success){
-
-    console.info("查询条件",options);
-
     $.ajax({
         url: SERVER_HOST + "/v1/api/data/get_data_list",
         type: "POST",

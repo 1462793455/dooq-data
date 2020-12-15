@@ -14,11 +14,30 @@ html{
 body{
     background-color: #f7f7f7;
     height: 100%;
+    /*padding: 0px 20px;*/
+    overflow: hidden;
+}
+
+.main-view-item-left{
+    width: 270px;
+    height: 100%;
+    background-color: white;
+    border-right: 1px solid #e4e4e4;
+    padding: 10px 15px;
+}
+
+.main-view-item-left .el-input--mini .el-input__inner {
+    height: 35px;
+    width: 95%;
+}
+
+.main-view-item-right{
+    width: 100%;
     padding: 0px 20px;
 }
 
 .header-view{
-
+    margin-bottom: 10px;
 }
 
 .footer-view{
@@ -52,6 +71,15 @@ body{
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
+}
+
+.header-button1{
+    font-size: 12px!important;
+    padding: 3px 10px!important;
+    height: 24px!important;
+    border-radius: 3px!important;
+    cursor: pointer!important;
+    user-select: none!important;
 }
 
 .header-button:hover{
@@ -104,6 +132,15 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+#app{
+    height: 100%;
+}
+
+.main-view-body{
+    height: 100%;
+    display: flex;
+}
+
 .render-view{
     width: 275px;
     display: flex;
@@ -121,3 +158,59 @@ input[type="number"] {
     flex-direction: column;
 }
 
+.filter-view-warp{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.data-filter-view{
+    width: 400px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-top: -19px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.data-filter-view .el-input--mini .el-input__inner{
+    height: 24px!important;
+}
+
+.data-filter-view .el-input{
+    width: 120px;
+}
+
+.data-filter-view::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 5px;
+}
+.data-filter-view::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
+    background: #535353;
+}
+.data-filter-view::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+.create-date-body  .el-form-item__label{
+    width: 55px!important;
+    line-height: 15px!important;
+}
+
+/*.left-form-item .el-form-item__label-wrap{*/
+/*    width: 50px;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*    white-space: nowrap;*/
+/*}*/
+
+/*.right-form-item .el-form-item__label-wrap{*/
+/*    width: 50px;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*    white-space: nowrap;*/
+/*}*/

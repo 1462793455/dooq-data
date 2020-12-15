@@ -49,12 +49,4 @@ public class TextareaFieldProcessor implements FieldProcessor {
         // 返回结果
         return DataResult.createSuccess("value like '%" + FieldProcessorUtil.getConditionJsonProperty(condition,TEXT_KEY) + "%'");
     }
-
-    public static void main(String[] args) {
-
-
-        String a= "value like '%" + "a" + "%'";
-        System.out.println(a);
-
-    }
 }

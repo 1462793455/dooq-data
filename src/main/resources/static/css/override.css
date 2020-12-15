@@ -61,7 +61,7 @@
 }
 
 .number-filter-body .el-form-item{
-    margin-right: 0px;
+    margin-right: 5px;
     width: 110px;
 }
 
@@ -69,8 +69,9 @@
     width: 100%;
 }
 
+
 .filter-body .el-form-item{
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 .filter-body .el-form-item__label{

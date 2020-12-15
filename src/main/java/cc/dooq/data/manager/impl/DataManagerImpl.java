@@ -54,7 +54,7 @@ public class DataManagerImpl implements DataManager {
     private ViewManager viewManager;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DataResult<Boolean> createData(DataCreateDTO param) {
 
         // 1. 校验参数是否合法 (视图校验、排除无效字段值、校验字段值是否合法)
@@ -293,58 +293,59 @@ public class DataManagerImpl implements DataManager {
         // 得到查询到的 数据结果
         List<RowDataDO> rowDataInfoList = rowInfoResult.getRecords();
 
-        // 获取所有 RowId
-        List<Long> rowIdList = rowDataInfoList.stream().map(RowDataDO::getId).collect(Collectors.toList());
-
         // 返回结果
-        return getColumnDataByRowId(rowIdList,pageInfo);
+        return getColumnDataByRowId(rowDataInfoList,pageInfo);
     }
 
     /**
      * 根据 rowId 查询匹配的 ColumnData
-     * @param rowIdList RowId
+     * @param rowInfoList RowId
      * @param pageInfo 分页信息
      * @return 结果
     */
-    private DataResult<Page<DataInfoVO>> getColumnDataByRowId(List<Long> rowIdList,Page pageInfo){
+    private DataResult<Page<DataInfoVO>> getColumnDataByRowId(List<RowDataDO> rowInfoList,Page pageInfo){
 
         // pageInfo 不可为空，为空时后续流程无法走通
         if(pageInfo == null){
             return DataResult.createError(DataResultCode.PAGE_INFO_NOT_NULL_ERROR);
         }
 
-        // 没有 rowIdList 则返回空 page 即可
-        if(rowIdList == null || rowIdList.isEmpty()){
+        // 没有 rowInfoList 则返回空 page 即可
+        if(rowInfoList == null || rowInfoList.isEmpty()){
             pageInfo.setRecords(new ArrayList());
             return DataResult.createSuccess(pageInfo);
         }
 
+        // 行ID集合
+        List<Long> rowIdList = rowInfoList.stream().map(RowDataDO::getId).collect(Collectors.toList());
+
         // 查询 rowId 所对应的所有 columnInfo
         List<ColumnDataDO> columnDataList =
-                columnDataMapper.selectList(new QueryWrapper<ColumnDataDO>().in("row_id", rowIdList.toArray()));
+                columnDataMapper.selectList(new QueryWrapper<ColumnDataDO>().in("row_id",rowIdList.toArray()));
+
+        // rowInfo 转换 Map 存储
+        Map<Long, RowDataDO> rowInfoMap =
+                rowInfoList.stream().collect(Collectors.toMap(RowDataDO::getId, (value) -> value));
 
         // 结果集
-        Map<Long,JSONObject> dataMapResult = new HashMap<>();
-
-        // 循环组装数据
-        for (ColumnDataDO columnDataDO : columnDataList) {
-            // 尝试从 dataResult 中获得值
-            JSONObject jsonObject = dataMapResult.get(columnDataDO.getRowId());
-            // 不存在则初始化
-            if(jsonObject == null){
-                jsonObject = new JSONObject();
+        Map<Long,List<ColumnDataDO>> dataMapResult = new HashMap<>();
+        columnDataList.forEach(item -> {
+            // 先获取其中的集合
+            List<ColumnDataDO> columnDataInnerList = dataMapResult.get(item.getRowId());
+            if(columnDataInnerList == null){
+                columnDataInnerList = new ArrayList<>();
             }
-            // 设置 jsonObject 参数
-            jsonObject.put(columnDataDO.getFieldId().toString(),columnDataDO.getValue());
-            // put 进去
-            dataMapResult.put(columnDataDO.getRowId(),jsonObject);
-        }
+            columnDataInnerList.add(item);
+            dataMapResult.put(item.getRowId(),columnDataInnerList);
+        });
+
 
         // 将 Map 数据 转换 List
         List<DataInfoVO> dataList = dataMapResult.entrySet().stream().map((item) -> {
             DataInfoVO dataInfoVO = new DataInfoVO();
             dataInfoVO.setRowId(item.getKey());
             dataInfoVO.setFieldInfo(item.getValue());
+            dataInfoVO.setRowDataInfo(rowInfoMap.get(item.getKey()));
             return dataInfoVO;
         }).collect(Collectors.toList());
 
@@ -441,7 +442,7 @@ public class DataManagerImpl implements DataManager {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DataResult<Boolean> updateData(DataUpdateDTO param) {
 
         // 1. 校验参数是否合法 (视图校验、排除无效字段值、校验字段值是否合法)
@@ -456,6 +457,9 @@ public class DataManagerImpl implements DataManager {
         if(!verifyRowResult.isSuccess()){
             return DataResult.createError(verifyRowResult);
         }
+
+        // 检查字段是否缺少，缺少则补齐 （如果行数据已经插入的情况下，添加了新字段，那么这行数据是没有的，所以需要补上 column 的数据）
+        makeUpColumnFieldMissing(param.getViewId(),param.getRowId());
 
         // 获得字段集合
         List<DataInfoDTO> dataInfoList = param.getDataInfoList();
@@ -480,6 +484,51 @@ public class DataManagerImpl implements DataManager {
 
         // 修改成功
         return DataResult.createSuccess();
+    }
+
+    /**
+     * 检查该行数据中，缺失的字段并补齐
+     * 注：由于已经插入数据后进行添加新字段，所以旧的列中会缺少新字段的数据信息，所以需要补齐
+    */
+    private DataResult makeUpColumnFieldMissing(Long viewId, Long rowId) {
+
+        // 必要参数不存在
+        if(viewId == null || rowId == null){
+            return DataResult.createError(DataResultCode.PARAM_ERROR);
+        }
+
+        // 1. 得到 viewId 中所有字段
+        List<FieldDO> fieldList = fieldMapper.selectList(new QueryWrapper<FieldDO>()
+                .eq("view_id", viewId));
+        // 2. 得到 rowId 中包含的所有字段
+        List<ColumnDataDO> columnDataList = columnDataMapper.selectList(new QueryWrapper<ColumnDataDO>()
+                .eq("row_id", rowId)
+                .eq("view_id", viewId));
+
+        // 将 ColumnDataList fieldId 转换 Map
+        Map<Long, ColumnDataDO> fieldIdMap =
+                columnDataList.stream().collect(Collectors.toMap(item -> item.getFieldId(), item -> item));
+
+        // 3. 根据差异补齐
+        List<FieldDO> differenceList = fieldList.stream().filter(item -> {
+            // 检查
+            ColumnDataDO columnDataInfo = fieldIdMap.get(item.getId());
+            if (columnDataInfo != null) {
+                return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
+
+        // 将  FieldDO 转换成 DataInfoDTO
+        List<DataInfoDTO> dataInfoList = differenceList.stream().map(item -> {
+            DataInfoDTO dataInfoInfo = new DataInfoDTO();
+            dataInfoInfo.setFieldId(item.getId());
+            dataInfoInfo.setValue("");
+            return dataInfoInfo;
+        }).collect(Collectors.toList());
+
+        // 操作成功
+        return createColumnData(viewId,rowId,dataInfoList);
     }
 
     /**
@@ -540,6 +589,8 @@ public class DataManagerImpl implements DataManager {
         List<Long> rowIdList = columnDataMapper.selectColumnDataRowIdList(fieldList, conditionList,viewId,paginationInfo);
 
         // 根据 rowId 查询结果
+        List<RowDataDO> rowInfoList =
+                rowDataMapper.selectList(new QueryWrapper<RowDataDO>().in("id", rowIdList.toArray()));
 
         // 构建 Page 并返回
         Page<DataInfoVO> pageResult = new Page<>();
@@ -548,7 +599,7 @@ public class DataManagerImpl implements DataManager {
         pageResult.setSize(rowIdList.size());
 
         // 返回结果
-        return getColumnDataByRowId(rowIdList,pageResult);
+        return getColumnDataByRowId(rowInfoList,pageResult);
     }
 
     @Override

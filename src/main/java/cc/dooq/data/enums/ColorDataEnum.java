@@ -11,10 +11,10 @@ public enum ColorDataEnum {
 
     // https://www.teambition.com/org-admin/5e6594f1dffa1d0001773c34/config/priority-manager
 
-    RED("#e62412",1),
-    ORANGE("#fa8c15",2),
-    GREEN("#15ad31",3),
-    BLUE("#1b9aee",4),
+//    RED("#e62412",1),
+//    ORANGE("#fa8c15",2),
+//    GREEN("#15ad31",3),
+//    BLUE("#1b9aee",4),
     GREY("#8c8c8c",5),
     LIGHTRED("#ffcccc",6),
     LIGHTORANGE("#ffd591",7),

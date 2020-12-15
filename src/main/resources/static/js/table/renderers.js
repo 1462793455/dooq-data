@@ -52,16 +52,16 @@ function initTextRenderer() {
 function textRenderFilter(h, renderOpts, {column}) {
     let template = {
         template: `<div class="filter-body text-filter-body">
-                                <label class="el-form-item__label">${column.title}</label>
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item style="width: 100%">
-                                        <el-input @change="changeText" v-model="value" placeholder="模糊查询"></el-input>
+                                        <el-input @change="changeText" v-model="value" :placeholder="title + ' 筛选'"></el-input>
                                     </el-form-item>
                                 </el-form>
                             </div>`,
         data: function () {
             return {
-                value :"",
+                value :null,
+                title:column.title,
             }
         },
         methods: {
@@ -125,7 +125,7 @@ function initSystemOperateRenderer() {
         renderDefault(h, renderOpts, {row, column}) {
             let template = {
                 template: `<div style="display: flex;justify-content: space-between;">
-                                <el-link :underline="false" @click="selectData" type="primary">查看</el-link>
+<!--                                <el-link :underline="false" @click="selectData" type="primary">查看</el-link>-->
                                 <el-link :underline="false" @click="editData" type="primary">编辑</el-link>
                                 <el-popconfirm @confirm="removeRowData" title="这是一段内容确定删除吗？">
                                   <el-link slot="reference" :underline="false" type="danger">删除</el-link>
@@ -157,6 +157,10 @@ function initSystemOperateRenderer() {
                                 // message: res.message,
                                 type: 'success'
                             });
+
+                            // 刷新数据
+                            getColumnDataFunction();
+
                         });
                     }
                 }
@@ -203,14 +207,13 @@ function initNumberRenderer() {
 
             let template = {
                 template: `<div class="filter-body number-filter-body">
-                                <label class="el-form-item__label">${column.title}</label>
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item >
-                                        <el-input v-model="startNumber" @change="changeStartNumber" type="number" placeholder="开始范围"></el-input>
+                                        <el-input v-model="startNumber" @change="changeStartNumber" type="number" :placeholder="title + '开始范围'"></el-input>
                                     </el-form-item>
-                                    <span style="font-size: 12px;line-height: 28px;">到</span>
+                                    <div style="width: 30px;text-align: center;font-size: 12px;line-height: 28px;">到</div>
                                     <el-form-item>
-                                        <el-input v-model="endNumber" @change="changeEntNumber" type="number" placeholder="结束范围"></el-input>
+                                        <el-input v-model="endNumber" @change="changeEntNumber" type="number" :placeholder="title + '结束范围'"></el-input>
                                     </el-form-item>
                                 </el-form>
                             </div>`,
@@ -218,6 +221,7 @@ function initNumberRenderer() {
                     return {
                         startNumber:null,
                         endNumber:null,
+                        title:column.title,
                     }
                 },
                 methods: {
@@ -414,15 +418,14 @@ function initDateTimeRenderer() {
         // 筛选模板 结束不能比开始小
         renderFilter(h, renderOpts, {column}) {
             let template = {
-                template: `<div class="filter-body number-filter-body">
-                                <label class="el-form-item__label">${column.title}</label>
+                template: `<div style="margin-left: 15px;" class="filter-body number-filter-body">
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item >
-                                       <el-date-picker value-format="timestamp" @change="customStartDateChange" v-model="startTime" type="datetime" placeholder="开始时间"> </el-date-picker>
+                                       <el-date-picker value-format="timestamp" @change="customStartDateChange" v-model="startTime" type="datetime" :placeholder="title + '开始时间'"> </el-date-picker>
                                     </el-form-item>
-                                    <span style="font-size: 12px;line-height: 28px;">到</span>
+                                    <div style="width: 20px;text-align: center;font-size: 12px;line-height: 28px;">到</div>
                                     <el-form-item>
-                                        <el-date-picker value-format="timestamp" @change="customEndDateChange" v-model="endTime" type="datetime" placeholder="结束时间"> </el-date-picker>
+                                        <el-date-picker value-format="timestamp" @change="customEndDateChange" v-model="endTime" type="datetime" :placeholder="title + '结束时间'"> </el-date-picker>
                                     </el-form-item>
                                 </el-form>
                             </div>`,
@@ -430,6 +433,7 @@ function initDateTimeRenderer() {
                     return {
                         startTime:null,
                         endTime:null,
+                        title:column.title,
                     }
                 },
                 methods: {

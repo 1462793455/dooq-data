@@ -19,7 +19,7 @@ function methods() {
                             data.forEach((item) => {
                                 if (item.viewId == viewId) {
                                     //切换到新视图
-                                    vm.checkView(item);
+                                    $checkView(item);
                                 }
                             })
                         }
@@ -95,13 +95,9 @@ function methods() {
         // 选择切换视图
         selectCurrViewItem(item, index) {
             // 切换
-            this.checkView(item);
+            $checkView(item);
             // 关闭模态框
             vm.$refs.viewWarpItem.doClose();
-        },
-        // 切换视图
-        checkView(item) {
-            $checkView(item);
         },
         // 创建新字段
         createViewFieldInfo() {
@@ -113,8 +109,8 @@ function methods() {
                     message: '恭喜你于清，视图修改成功了!',
                     type: 'success'
                 });
-                // 关闭模态框
-                vm.createFieldDialogVisible = false;
+                // // 关闭模态框
+                // vm.createFieldDialogVisible = false;
                 // 重置 fieldCreateInfo
                 resetFieldCreateInfo();
                 // 刷新表格
@@ -134,7 +130,7 @@ function methods() {
                 // 当前编辑的列ID
                 let rowId = vm.editRowId;
                 // 所有列单元格数据
-                let columnData = vm.columnData;
+                let columnData = vm.dataResult.resultList;
                 // 循环找到对应的数据
                 columnData.forEach(item => {
                     let irowId = item.rowId;
@@ -164,7 +160,7 @@ function methods() {
                 // 获取筛选框 element
                 this.$slots[fieldInfo.field] = renderer.renderFilter(h, null, {column:fieldInfo})[0];
             }catch (e) {
-                console.info(e);
+                // console.info(e);
             }
         },
         // 单元格 edit 输入时触发
@@ -235,6 +231,13 @@ function methods() {
                     // message: res.message,
                     type: 'success'
                 });
+
+                // 刷新数据
+                getColumnDataFunction();
+
+                // 关闭输入框
+                vm.editDataDialogClose();
+
             });
 
         },
@@ -247,6 +250,12 @@ function methods() {
                     // message: res.message,
                     type: 'success'
                 });
+
+                // 刷新数据
+                getColumnDataFunction();
+                // 关闭输入框
+                vm.editDataDialogClose();
+
             });
         },
 
@@ -283,7 +292,24 @@ function methods() {
         filterColumnDate(){
             getColumnDataFunction();
         },
+        // 重置筛选数据
+        resetFilterColumnData(){
 
-    };
+            // 1. 重置查询数据
+            resetSelectData();
 
+            // 2. 重新获取数据
+            getColumnDataFunction();
+
+        },
+        // 切换数据页
+        changeCruuPage(currPageNumber){
+
+            // 1. 设置查询页
+            vm.selectData.pageNumber = currPageNumber;
+            // 查询
+            getColumnDataFunction();
+        },
+
+    }
 }

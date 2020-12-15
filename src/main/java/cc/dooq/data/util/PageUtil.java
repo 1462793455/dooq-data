@@ -25,8 +25,7 @@ public class PageUtil {
         // 获得 分页信息
         PaginationDTO defaultPage = defaultPaginationResult.getData();
         // 生成并返回
-        Page<T> objectPage = new Page<T>(defaultPage.getPageNumber(), defaultPage.getPageSize());
-        objectPage.setSearchCount(true);
+        Page<T> objectPage = new Page<>(defaultPage.getPageNumber(), defaultPage.getPageSize());
         // 返回
         return DataResult.createSuccess(objectPage);
     }
@@ -46,11 +45,11 @@ public class PageUtil {
         Integer pageSize = pagination.getPageSize();
 
         // 默认等于 1
-        if(pageNumber == null || pageNumber >= 0){
+        if(pageNumber == null || pageNumber <= 0){
             pagination.setPageNumber(CommonConstants.PAGE_DEFAULT_NUMBER);
         }
         // pageSize
-        if(pageSize == null || pageSize >= 0 || pageSize > CommonConstants.PAGE_MAX_SIZE){
+        if(pageSize == null || pageSize <= 0 || pageSize > CommonConstants.PAGE_MAX_SIZE){
             pagination.setPageSize(CommonConstants.PAGE_DEFAULT_SIZE);
         }
 
@@ -79,9 +78,9 @@ public class PageUtil {
      */
     public static Integer pageSize(Integer pageSize) {
         if (null == pageSize) {
-            pageSize = CommonConstants.DEFAULT_PAGE_SIZE;
+            pageSize = CommonConstants.PAGE_DEFAULT_SIZE;
         }
-        return pageSize < CommonConstants.MIN_PAGE_SIZE || pageSize > CommonConstants.MAX_PAGE_SIZE ? CommonConstants.DEFAULT_PAGE_SIZE : pageSize;
+        return pageSize < CommonConstants.PAGE_DEFAULT_SIZE || pageSize > CommonConstants.PAGE_MAX_SIZE ? CommonConstants.PAGE_DEFAULT_SIZE : pageSize;
     }
 
     /**
@@ -94,7 +93,7 @@ public class PageUtil {
             curPage = 1;
         }
         if (null == pageSize) {
-            pageSize = CommonConstants.DEFAULT_PAGE_SIZE;
+            pageSize = CommonConstants.PAGE_DEFAULT_SIZE;
         }
         return (curPage(curPage) - 1) * pageSize(pageSize);
     }

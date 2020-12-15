@@ -1,6 +1,7 @@
 package cc.dooq.data.controller;
 
 import cc.dooq.data.dto.ViewCreateDTO;
+import cc.dooq.data.dto.ViewGetInfoDTO;
 import cc.dooq.data.dto.ViewUpdateDTO;
 import cc.dooq.data.service.ViewService;
 import cc.dooq.data.util.DataResult;
@@ -51,7 +52,7 @@ public class ViewController {
      * 查询视图列表
      */
     @GetMapping("/view_list")
-    public DataResult<List<ViewVO>> viewList(){
+    public DataResult<List<ViewVO>> viewList(ViewGetInfoDTO param){
         return viewService.selectAllView();
     }
 

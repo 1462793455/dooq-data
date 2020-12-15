@@ -47,6 +47,11 @@ function parseFieldCreateInfoForFieldInfo(){
 */
 function $checkView(viewInfo){
 
+    // 检查如果当前已经是这个视图则不进行切换
+    if((vm.currSelectViewInfo && vm.currSelectViewInfo.viewId == viewInfo.viewId) || !viewInfo){
+        return;
+    }
+
     // 1. 切换视图信息
     vm.currSelectViewInfo = viewInfo;
     // 2. 刷新字段
@@ -111,7 +116,7 @@ function afterAddColumns(columns){
             // 使用 slot:operate 作为内容展示
             // slots: { default: 'operate' },
             cellRender:{name:"system-operate"},
-            width: 140});
+            width: 90});
 }
 
 // 组装 字段信息
@@ -133,9 +138,6 @@ function assembleFieldInfo(fieldInfo){
 
         // 字段宽度
         let fieldWidth = fieldInfo.fieldWidth;
-
-        // 字段颜色
-        let fieldColor = fieldInfo.fieldColor;
 
         return  {field: fieldInfo.id, title: fieldName, width: fieldWidth ,editRender: { name: rendererName  }};
 
@@ -186,6 +188,8 @@ function dateFormat (time, format) {
 */
 function getColumnDataFunction(){
 
+    // TODO 如果啥都没填则不进行筛选，如果旧的和新的一模一样也不进行筛选
+
     // 查询数据
     let selectData = vm.selectData;
 
@@ -209,12 +213,13 @@ function getColumnDataFunction(){
         })
     }
 
+    // 加载状态
+    vm.tableDataLoading = true;
+
     // 获取数据
     getColumnData({
         viewId,pageNumber,pageSize,filterCondition:filterList
     },(dataInfo)=>{
-
-        console.info("数据",dataInfo);
 
         // 数据List
         let records = dataInfo.records;
@@ -241,12 +246,52 @@ function getColumnDataFunction(){
         // 循环格式化数据
         records.forEach(item => {
             let fieldInfo = item.fieldInfo;
+            fieldInfo = forEachProcessColumnData(fieldInfo);
             fieldInfo["rowId"] = item.rowId;
+            fieldInfo["_rowInfo"] = item.rowDataInfo;
             data.push(fieldInfo);
         });
 
         // 设置到表格中
         vm.gridOptions.data = data;
+
+        // 关闭加载状态
+        vm.tableDataLoading = false;
     });
 
+}
+
+// 处理字段信息
+function forEachProcessColumnData(fieldInfo){
+    let fieldInfoTemporary = {};
+    for(let i = 0; i < fieldInfo.length; i++){
+        // 单元格数据信息
+        let fieldItem = fieldInfo[i];
+
+        // 字段ID
+        let fieldId = fieldItem.fieldId;
+        // 设置 字段ID -》 字段值
+        fieldInfoTemporary[fieldId] = fieldItem.value;
+        // 设置系统参数 _字段ID -》 字段详细信息
+        fieldInfoTemporary["_" + fieldId] = fieldItem;
+    }
+    // 返回处理结果
+    return fieldInfoTemporary;
+}
+
+
+// 返回默认的查询数据
+function getDefaultSelectData(){
+    return {
+        // 筛选条件 map  其中 字段id -> 条件对象如：{startTime:"xx","endTime":"xx"}
+        // id:{xxx:xxx},id:{xxx:xxx}
+        filter:[],
+        pageNumber:1,            // 当前页
+        pageSize:20,              // 当前页大小
+    }
+}
+
+// 重置查询数据
+function resetSelectData(){
+    vm.selectData = getDefaultSelectData();
 }

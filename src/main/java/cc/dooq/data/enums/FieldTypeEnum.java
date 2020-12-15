@@ -11,10 +11,10 @@ public enum FieldTypeEnum {
 //    RADIO("单选项",1,true),
 //    CHECKBOX("多选项",2,true),
     NUMBER(3,"数字项","custom-number"),
-    TEXT(4,"文本项","custom-text"),
+//    TEXT(4,"文本项","custom-text"),
     TEXTAREA(5,"文本域","custom-textarea"),
 //    URL(6,"超链接"),
-    DATE(7,"日期","custom-date"),
+//    DATE(7,"日期","custom-date"),
 //    TIME(8,"时间","custom-time"),
     DATE_TIME(9,"日期时间","custom-date-time"),
     ;

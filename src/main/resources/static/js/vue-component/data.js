@@ -30,13 +30,9 @@ function data() {
             fields:[] // 修改的字段、值信息
         },
         // 查询条件存储
-        selectData:{
-            // 筛选条件 map  其中 字段id -> 条件对象如：{startTime:"xx","endTime":"xx"}
-            // id:{xxx:xxx},id:{xxx:xxx}
-            filter:[],
-            pageNumber:1,            // 当前页
-            pageSize:20,              // 当前页大小
-        },
+        selectData: getDefaultSelectData(),
+        // 表格数据加载状态
+        tableDataLoading:false,
         // 数据信息存储
         dataResult:{
             resultList:[],// 结果集
@@ -45,12 +41,17 @@ function data() {
             totalPage:null,         // 页总数
             totalDataCount:null,    // 数据总数
         },
+        // 筛选字段列表
+        filterColumnList:null,
         // 编辑模式  0 : 添加 1: 修改 2：查看
         editMode: 0,
         // 当前编辑行ID
         editRowId:null,
         // 单元格配置
         gridOptions: {
+            // 表格大小
+            size:"mini",
+            // 是否需要边框
             border: true,
             // 列宽是否允许调整
             resizable: true,
@@ -60,6 +61,12 @@ function data() {
             showOverflow: true,
             // 移动到当列是否高亮显示
             highlightHoverRow: true,
+            // 高亮当前行
+            highlightCurrentRow: true,
+            // 高亮当前列
+            highlightCurrentColumn: true,
+            // 鼠标移到列是否要高亮显示
+            highlightHoverColumn: true,
             // 斑马纹
             stripe:true,
             // 字段配置
@@ -81,7 +88,70 @@ function data() {
                 // 服务端进行筛选
                 // remote:true,
                 showIcon:true,
-            }
+            },
+            // 行样式设定
+            rowStyle({ row, rowIndex, $rowIndex }){
+                // 行信息
+                let rowInfo = row["_rowInfo"];
+                if(rowInfo && rowInfo["rowColorId"]){
+                    // 颜色信息
+                    let colorInfo = vm.colorList[rowInfo["rowColorId"]];
+                    if(colorInfo){
+                        return {
+                            backgroundColor: colorInfo.color,
+                        }
+                    }
+                }
+            },
+            // 单元格样式设定,这里 列和单元格样式都在处理
+            // 系统列无法上色
+            // 样式优先级为 单元格 > 行
+            cellStyle({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }){
+                console.info(column);
+                // 字段ID
+                let fieldId = column.property;
+                // 字段详细信息
+                let fieldInfo = row["_" + fieldId];
+                if(fieldInfo && fieldInfo["columnColorId"]){
+                    // 颜色信息
+                    let colorInfo = vm.colorList[fieldInfo["columnColorId"]];
+                    if(colorInfo){
+                        return {
+                            backgroundColor: colorInfo.color,
+                        }
+                    }
+                }
+
+            },
+            // 快捷菜单配置
+            menuConfig:{
+                // 单元格/行 菜单
+                body: {
+                    options: [
+                        [
+                            { code: '置顶', name: '置顶' },
+                            { code: '取消置顶', name: '取消置顶' },
+                            { code: '设置单元格背景色', name: '设置单元格背景色' },
+                            { code: '设置行背景色', name: '设置行背景色', record: { name: '默认名称' } }
+                        ]
+                    ]
+                },
+                // 字段/列菜单
+                header:{
+                    options: [
+                        [
+                            { code: 'exportData', name: '删除字段' },
+                            { code: 'exportData', name: '固定' },
+                            { code: 'exportData', name: '删除字段' },
+                            { code: 'insert', name: '修改字段名称', record: { name: '默认名称' } }
+                        ]
+                    ]
+                }
+            },
+            // 列宽调整时
+            resizableChange({ $rowIndex, column, columnIndex, $columnIndex, $event }){
+                console.info(column.property,column.renderWidth);
+            },
         },
 
     }
