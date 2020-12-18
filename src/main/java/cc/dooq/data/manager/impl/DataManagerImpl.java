@@ -17,6 +17,7 @@ import cc.dooq.data.util.*;
 import cc.dooq.data.vo.DataInfoVO;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,9 +98,13 @@ public class DataManagerImpl implements DataManager {
             return DataResult.createError(DataResultCode.VIEW_NOT_LICIT_FIELD);
         }
 
+        // 没有添加的数据时
+        if(dataInfoList == null || dataInfoList.isEmpty()){
+            return DataResult.createError(DataResultCode.NOT_PARAM);
+        }
+
         // 将 DataInfoDTO 转换为 Map 进行操作
-        Map<Long, String> dataInfoMap =
-                dataInfoList.stream().collect(Collectors.toMap(DataInfoDTO::getFieldId, DataInfoDTO::getValue));
+        Map<Long, String> dataInfoMap = dataInfoList.stream().collect(Collectors.toMap(DataInfoDTO::getFieldId,DataInfoDTO::getValue));
 
         // 循环生成 columnData 并插入
         for (FieldDO fieldInfo : fieldList) {
@@ -453,7 +458,7 @@ public class DataManagerImpl implements DataManager {
         }
 
         // 校验行是否存在
-        DataResult verifyRowResult = verifyRowId(param.getRowId());
+        DataResult verifyRowResult = verifyRowId(Arrays.asList(param.getRowId()));
         if(!verifyRowResult.isSuccess()){
             return DataResult.createError(verifyRowResult);
         }
@@ -557,18 +562,18 @@ public class DataManagerImpl implements DataManager {
 
     /**
      * 校验 rowId 是否合法
-     * @param rowId 行ID
+     * @param rowIds 行ID
      * @return 校验结果
     */
-    private DataResult verifyRowId(Long rowId){
+    private DataResult verifyRowId(List<Long> rowIds){
         // row ID 不存在
-        if(rowId == null){
+        if(rowIds == null){
             return DataResult.createError(DataResultCode.ROW_ID_IS_NULL_ERROR);
         }
 
         // 检查数据是否存在
-        RowDataDO rowDataInfo = rowDataMapper.selectById(rowId);
-        if(rowDataInfo == null){
+        Integer idCount = rowDataMapper.selectCount(new QueryWrapper<RowDataDO>().in("id", rowIds.toArray()));
+        if(idCount == null || idCount.intValue() != rowIds.size()){
             return DataResult.createError(DataResultCode.ROW_NOT_EXIST_ERROR);
         }
 
@@ -587,6 +592,16 @@ public class DataManagerImpl implements DataManager {
 
         // 得到分页好的 rowId
         List<Long> rowIdList = columnDataMapper.selectColumnDataRowIdList(fieldList, conditionList,viewId,paginationInfo);
+        if(rowIdList == null || rowIdList.isEmpty()){
+            // 构建 Page 并返回
+            Page<DataInfoVO> pageResult = new Page<>();
+            pageResult.setCurrent(paginationInfo.getPageNumber());
+            pageResult.setTotal(rowCount);
+            pageResult.setSize(paginationInfo.getPageSize());
+            pageResult.setRecords(null);
+            return DataResult.createSuccess(pageResult);
+        }
+
 
         // 根据 rowId 查询结果
         List<RowDataDO> rowInfoList =
@@ -596,17 +611,18 @@ public class DataManagerImpl implements DataManager {
         Page<DataInfoVO> pageResult = new Page<>();
         pageResult.setCurrent(paginationInfo.getPageNumber());
         pageResult.setTotal(rowCount);
-        pageResult.setSize(rowIdList.size());
+        pageResult.setSize(paginationInfo.getPageSize());
 
         // 返回结果
         return getColumnDataByRowId(rowInfoList,pageResult);
     }
 
     @Override
-    public DataResult<Boolean> removeRowData(Long rowId) {
+    @Transactional(rollbackFor = Exception.class)
+    public DataResult<Boolean> removeRowData(List<Long> rowIds) {
 
         // 校验 rowId 是否有效
-        DataResult verifyResult = verifyRowId(rowId);
+        DataResult verifyResult = verifyRowId(rowIds);
         if(!verifyResult.isSuccess()){
             return DataResult.createError(verifyResult);
         }
@@ -614,12 +630,20 @@ public class DataManagerImpl implements DataManager {
         try{
 
             // 删除
-            int deleteCount = rowDataMapper.deleteById(rowId);
+            int deleteCount = rowDataMapper.deleteBatchIds(rowIds);
+
+            if(deleteCount != rowIds.size()){
+                // 回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return DataResult.createDBError();
+            }
 
             // 返回结果
-            return DataResult.createSuccess(deleteCount > 0);
+            return DataResult.createSuccess(true);
         }catch (Exception e){
             log.error("DataManagerImpl#removeRowData",e);
+            // 回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return DataResult.createDBError();
         }
     }

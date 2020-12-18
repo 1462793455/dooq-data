@@ -47,6 +47,12 @@ function data() {
         editMode: 0,
         // 当前编辑行ID
         editRowId:null,
+        // 原始 字段配置
+        originalColumn:[],
+        // 选择筛选字段
+        filterColumnSelect:null,
+        // 当前选中的数据
+        selectedRowDataArrays:[],
         // 单元格配置
         gridOptions: {
             // 表格大小
@@ -68,7 +74,7 @@ function data() {
             // 鼠标移到列是否要高亮显示
             highlightHoverColumn: true,
             // 斑马纹
-            stripe:true,
+            // stripe:true,
             // 字段配置
             columns: [],
             // 数据
@@ -107,7 +113,6 @@ function data() {
             // 系统列无法上色
             // 样式优先级为 单元格 > 行
             cellStyle({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }){
-                console.info(column);
                 // 字段ID
                 let fieldId = column.property;
                 // 字段详细信息
@@ -152,6 +157,18 @@ function data() {
             resizableChange({ $rowIndex, column, columnIndex, $columnIndex, $event }){
                 console.info(column.property,column.renderWidth);
             },
+            // 手动选择数据时
+            checkboxChange({ records, reserves, indeterminates, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }){
+               setSelectedRowDataArrays(records);
+            },
+            // 全选数据时
+            checkboxAll({ records, reserves, indeterminates, checked, $event }){
+                setSelectedRowDataArrays(records);
+            },
+            // 拖动选中时
+            checkboxRangeChange({ records, reserves, $event }){
+                setSelectedRowDataArrays(records);
+            }
         },
 
     }

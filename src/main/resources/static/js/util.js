@@ -92,9 +92,10 @@ function refreshFieldInfo(viewId){
         // 后系统字段
         afterAddColumns(columns);
 
-        // 设置进去
+        // 表格字段配置
         vm.gridOptions.columns = columns;
-
+        // 原始字段配置，这个相当于备份，针对表格字段配置将会从这里取数据然后设置到 gridOptions 中
+        vm.originalColumn = columns;
     });
 }
 
@@ -102,7 +103,7 @@ function refreshFieldInfo(viewId){
 function beforeAddColumns(columns){
     return columns.push({ type: 'checkbox',
         // 是否允许拖动
-        resizable:false ,system:true, title: '', width: 55 });
+        resizable:false ,system:true,fixed:"left", title: '', width: 55 });
 }
 // 后字段
 function afterAddColumns(columns){
@@ -112,6 +113,7 @@ function afterAddColumns(columns){
             system:true,
             // 是否允许拖动
             resizable:false ,
+            fixed:"right",
             title: '操作',
             // 使用 slot:operate 作为内容展示
             // slots: { default: 'operate' },
@@ -139,7 +141,7 @@ function assembleFieldInfo(fieldInfo){
         // 字段宽度
         let fieldWidth = fieldInfo.fieldWidth;
 
-        return  {field: fieldInfo.id, title: fieldName, width: fieldWidth ,editRender: { name: rendererName  }};
+        return  {field: fieldInfo.id,showFilter:false, title: fieldName, width: fieldWidth ,editRender: { name: rendererName  }};
 
     }catch (e) {
 
@@ -181,6 +183,17 @@ function dateFormat (time, format) {
         let rt = hash[o.toLocaleLowerCase()]
         return rt > 10 || !isAddZero(o) ? rt : `0${rt}`
     })
+}
+
+// 过滤查询 区别在于提前会将 分页数据重置
+function filterColumnDateFunction(){
+
+    // 重置分页参数
+    vm.selectData.pageNumber = getDefaultSelectData().pageNumber;
+    vm.selectData.pageSize = getDefaultSelectData().pageSize;
+
+    // 查询
+    getColumnDataFunction();
 }
 
 /**
@@ -244,17 +257,24 @@ function getColumnDataFunction(){
         // 数据转换并展示到表格中
         let data = [];
         // 循环格式化数据
-        records.forEach(item => {
-            let fieldInfo = item.fieldInfo;
-            fieldInfo = forEachProcessColumnData(fieldInfo);
-            fieldInfo["rowId"] = item.rowId;
-            fieldInfo["_rowInfo"] = item.rowDataInfo;
-            data.push(fieldInfo);
-        });
+        if(records){
+            records.forEach(item => {
+                let fieldInfo = item.fieldInfo;
+                fieldInfo = forEachProcessColumnData(fieldInfo);
+                fieldInfo["rowId"] = item.rowId;
+                fieldInfo["_rowInfo"] = item.rowDataInfo;
+                data.push(fieldInfo);
+            });
+        }
 
         // 设置到表格中
         vm.gridOptions.data = data;
 
+        // 关闭加载状态
+        vm.tableDataLoading = false;
+    },(error)=>{
+        // 设置到表格中
+        vm.gridOptions.data = [];
         // 关闭加载状态
         vm.tableDataLoading = false;
     });
@@ -294,4 +314,11 @@ function getDefaultSelectData(){
 // 重置查询数据
 function resetSelectData(){
     vm.selectData = getDefaultSelectData();
+}
+
+/**
+ * 选中数据时将选中的数据设置到 vm 中
+*/
+function setSelectedRowDataArrays(records){
+    vm.selectedRowDataArrays = records;
 }

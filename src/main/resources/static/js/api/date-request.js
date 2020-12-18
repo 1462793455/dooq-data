@@ -27,11 +27,13 @@ function createData(viewId,fields,success){
 }
 
 // 删除 行数据
-function deleteRowData(rowId,success){
+function deleteRowData(rowIds,success){
     $.ajax({
         url: SERVER_HOST + "/v1/api/data/remove_row_data",
         type: "POST",
-        data:{"rowId":rowId},
+        dataType: "json",
+        contentType: "application/json",
+        data:JSON.stringify(rowIds),
         success:function(res){
             if(SUCCESS_CODE == res.errCode){
                 success && success(res.data);
@@ -74,7 +76,7 @@ function updateData(viewId,rowId,fields,success){
 }
 
 // 获取数据
-function getColumnData(options,success){
+function getColumnData(options,success,error){
     $.ajax({
         url: SERVER_HOST + "/v1/api/data/get_data_list",
         type: "POST",
@@ -90,12 +92,11 @@ function getColumnData(options,success){
             if(SUCCESS_CODE == res.errCode && res.data != null){
                 success && success(res.data);
             } else {
-                vm.$notify({
-                    title: '获取视图失败',
-                    message: res.message,
-                    type: 'error'
-                });
+                error && error(res);
             }
+        },
+        error:function(res){
+            error && error(res);
         }
     })
 

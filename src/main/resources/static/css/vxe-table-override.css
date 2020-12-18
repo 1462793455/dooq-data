@@ -19,3 +19,44 @@
 .vxe-cell .el-input-number,.el-date-editor{
     width: 100%!important;
 }
+
+.vxe-table .is--checked.vxe-cell--checkbox .vxe-checkbox--icon:before{
+    border-color: #ffa0c7;
+    background-color: #ff70ab;
+}
+
+.vxe-custom--option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-export--panel-column-option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-table--filter-option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-table .vxe-cell--checkbox:not(.is--disabled):hover .vxe-checkbox--icon:before{
+    border-color: #ffa0c7;
+}
+
+.vxe-table.column--highlight .vxe-header--column:not(.col--seq):hover{
+    background-color: #fcc2da;
+    color: white;
+}
+
+.vxe-table .vxe-body--column.col--current, .vxe-table .vxe-body--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-footer--column.col--current, .vxe-table .vxe-footer--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-header--column.col--current, .vxe-table .vxe-header--column.col--current .vxe-tree--btn-wrapper{
+    background-color: #fcc2da;
+}
+.vxe-table .vxe-body--row.row--current{
+    background-color: #fcc2da!important;
+    color: white;
+}
+
+.is--checked.vxe-custom--option .vxe-checkbox--icon:before, .is--checked.vxe-export--panel-column-option .vxe-checkbox--icon:before, .is--checked.vxe-table--filter-option .vxe-checkbox--icon:before, .is--indeterminate.vxe-custom--option .vxe-checkbox--icon:before, .is--indeterminate.vxe-export--panel-column-option .vxe-checkbox--icon:before, .is--indeterminate.vxe-table--filter-option .vxe-checkbox--icon:before, .vxe-table .is--checked.vxe-cell--checkbox .vxe-checkbox--icon:before, .vxe-table .is--indeterminate.vxe-cell--checkbox .vxe-checkbox--icon:before{
+    border-color: #ffa0c7;
+    background-color: #ff70ab;
+}
+
+.vue-table .vue-body--row.row--hover.row--current{
+    background-color: #fcc2da;
+    color: white;
+}
+
+.vxe-table .vxe-body--column.col--current, .vxe-table .vxe-body--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-footer--column.col--current, .vxe-table .vxe-footer--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-header--column.col--current, .vxe-table .vxe-header--column.col--current .vxe-tree--btn-wrapper{
+    background-color: #fcc2da;
+    color: white;
+}
+
+.vxe-table.border--full .vxe-header--column{
+    background-image: linear-gradient(#e8eaec,#e8eaec),linear-gradient(#ffffff,#ececec);
+}

@@ -40,10 +40,10 @@ public interface DataManager {
 
     /**
      * 删除  row 数据
-     * @param rowId 行ID
+     * @param rowIds 行ID
      * @return 结果
      */
-    DataResult<Boolean> removeRowData(Long rowId);
+    DataResult<Boolean> removeRowData(List<Long> rowIds);
 
     /**
      * @param fieldList 字段ID集合

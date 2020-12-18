@@ -8,6 +8,8 @@ import cc.dooq.data.util.DataResult;
 import cc.dooq.data.vo.DataInfoVO;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 /**
  * @author 蛋清
  * @Description:
@@ -38,8 +40,8 @@ public interface DataService {
 
     /**
      * 删除  row 数据
-     * @param rowId 行ID
+     * @param rowIds 行ID
      * @return 结果
     */
-    DataResult<Boolean> removeRowData(Long rowId);
+    DataResult<Boolean> removeRowData(List<Long> rowIds);
 }

@@ -96,8 +96,39 @@ function methods() {
         selectCurrViewItem(item, index) {
             // 切换
             $checkView(item);
-            // 关闭模态框
-            vm.$refs.viewWarpItem.doClose();
+        },
+        // 批量删除数据
+        batchRemoveRowData(){
+
+            // 得到当前批量选中的数据
+            let selectedRowDataArrays = vm.selectedRowDataArrays;
+            // 循环组装数据ID
+            let idArrays = [];
+            selectedRowDataArrays.forEach(item => {
+                idArrays.push(item.rowId);
+            });
+
+            if(idArrays.length <= 0){
+                vm.$message({
+                    message: '没有选中任何数据，无法批量删除',
+                    type: 'error'
+                });
+                return;
+            }
+
+            // 删除
+            deleteRowData(idArrays, () => {
+
+                vm.$notify({
+                    title: '删除数据成功',
+                    // message: res.message,
+                    type: 'success'
+                });
+
+                // 刷新数据
+                getColumnDataFunction();
+
+            });
         },
         // 创建新字段
         createViewFieldInfo() {
@@ -135,7 +166,14 @@ function methods() {
                 columnData.forEach(item => {
                     let irowId = item.rowId;
                     if(rowId == irowId){
-                        row = item.fieldInfo;
+
+                        // 数据转换 fieldId -> 信息
+                        let fieldInfo = item.fieldInfo;
+                        if(fieldInfo){
+                            fieldInfo.forEach(item => {
+                                row[item.fieldId] = item.value;
+                            })
+                        }
                     }
                 });
             }
@@ -213,11 +251,8 @@ function methods() {
             if(vm.editMode == 0){
                 this.createColumnData();
                 // 修改框
-            } else if(vm.editMode == 1){
+            } else if(vm.editMode == 1) {
                 this.editColumnDataFun();
-                // 查看框
-            } else if(vm.editMode == 2){
-
             }
 
         },
@@ -234,6 +269,9 @@ function methods() {
 
                 // 刷新数据
                 getColumnDataFunction();
+
+                // 清除输入缓存
+                vm.editData.fields = [];
 
                 // 关闭输入框
                 vm.editDataDialogClose();
@@ -253,6 +291,10 @@ function methods() {
 
                 // 刷新数据
                 getColumnDataFunction();
+
+                // 清除输入缓存
+                vm.editData.fields = [];
+
                 // 关闭输入框
                 vm.editDataDialogClose();
 
@@ -290,7 +332,7 @@ function methods() {
 
         // 筛选按钮点击触发
         filterColumnDate(){
-            getColumnDataFunction();
+            filterColumnDateFunction();
         },
         // 重置筛选数据
         resetFilterColumnData(){

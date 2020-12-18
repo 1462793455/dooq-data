@@ -22,10 +22,10 @@ function initTextRenderer() {
         // 可编辑激活模板
         renderEdit(h, renderOpts, {row, column}) {
             let template = {
-                template: '<el-input @input="customTextInput" placeholder="请输入" v-model="input"></el-input>',
+                template: '<el-input @input="customTextInput" placeholder="请输入内容" v-model="input"></el-input>',
                 data: function () {
                     return {
-                        input: row[column.property || null]
+                        input: row[column.property || null],
                     }
                 },
                 methods: {
@@ -127,7 +127,7 @@ function initSystemOperateRenderer() {
                 template: `<div style="display: flex;justify-content: space-between;">
 <!--                                <el-link :underline="false" @click="selectData" type="primary">查看</el-link>-->
                                 <el-link :underline="false" @click="editData" type="primary">编辑</el-link>
-                                <el-popconfirm @confirm="removeRowData" title="这是一段内容确定删除吗？">
+                                <el-popconfirm @onConfirm="removeRowData" title="确定删除这些数据吗？">
                                   <el-link slot="reference" :underline="false" type="danger">删除</el-link>
                                 </el-popconfirm>
                             </div>`,
@@ -151,7 +151,8 @@ function initSystemOperateRenderer() {
                     },
                     // 删除当前行
                     removeRowData() {
-                        deleteRowData(row["rowId"], () => {
+                        deleteRowData([row["rowId"]], () => {
+
                             vm.$notify({
                                 title: '删除数据成功',
                                 // message: res.message,
@@ -211,7 +212,7 @@ function initNumberRenderer() {
                                     <el-form-item >
                                         <el-input v-model="startNumber" @change="changeStartNumber" type="number" :placeholder="title + '开始范围'"></el-input>
                                     </el-form-item>
-                                    <div style="width: 30px;text-align: center;font-size: 12px;line-height: 28px;">到</div>
+                                    <div class="input-separate" >到</div>
                                     <el-form-item>
                                         <el-input v-model="endNumber" @change="changeEntNumber" type="number" :placeholder="title + '结束范围'"></el-input>
                                     </el-form-item>
@@ -418,12 +419,12 @@ function initDateTimeRenderer() {
         // 筛选模板 结束不能比开始小
         renderFilter(h, renderOpts, {column}) {
             let template = {
-                template: `<div style="margin-left: 15px;" class="filter-body number-filter-body">
+                template: `<div style="margin-right: 5px;" class="filter-body number-filter-body">
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item >
                                        <el-date-picker value-format="timestamp" @change="customStartDateChange" v-model="startTime" type="datetime" :placeholder="title + '开始时间'"> </el-date-picker>
                                     </el-form-item>
-                                    <div style="width: 20px;text-align: center;font-size: 12px;line-height: 28px;">到</div>
+                                    <div class="input-separate">到</div>
                                     <el-form-item>
                                         <el-date-picker value-format="timestamp" @change="customEndDateChange" v-model="endTime" type="datetime" :placeholder="title + '结束时间'"> </el-date-picker>
                                     </el-form-item>

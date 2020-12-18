@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author 蛋清
  * @Description:
@@ -39,7 +41,7 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public DataResult<Boolean> removeRowData(Long rowId) {
-        return dataManager.removeRowData(rowId);
+    public DataResult<Boolean> removeRowData(List<Long> rowIds) {
+        return dataManager.removeRowData(rowIds);
     }
 }

@@ -3,13 +3,14 @@
     justify-content: space-between;
     margin-top: 15px;
     padding: 0 10px;
+    color: white;
     /*padding: 0 8px;*/
 }
 
 .view-header-name{
     font-size: 12px;
     font-weight: bold;
-    color: black;
+    color: white;
 }
 
 .view-header .el-tooltip{
@@ -34,7 +35,7 @@
     margin-bottom: 5px;
     justify-content: space-between;
     flex-direction: row;
-    color: #595959;
+    color: white;
     font-size: 12px;
 }
 
@@ -52,10 +53,20 @@
 
 .view-list-item:hover{
     background-color: #f7f7f7;
+    color: #333333;
 }
 
 .select-view-style{
     background-color: #f7f7f7;
+    color: #333333;
+}
+
+.select-view-style .el-icon-more-outline{
+    color: #333333!important;
+}
+
+.view-list-item .el-icon-more-outline{
+    color: white;
 }
 
 .view-list-item-name{

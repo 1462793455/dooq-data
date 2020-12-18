@@ -18,4 +18,11 @@ public class DataInfoDTO implements Serializable {
     /** 字段值 */
     private String value;
 
+    public DataInfoDTO(Long fieldId, String value) {
+        this.fieldId = fieldId;
+        this.value = value;
+    }
+
+    public DataInfoDTO() {
+    }
 }

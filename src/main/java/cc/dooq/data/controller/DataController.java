@@ -1,15 +1,19 @@
 package cc.dooq.data.controller;
 
-import cc.dooq.data.dto.ColumnDataGetDTO;
-import cc.dooq.data.dto.DataCreateDTO;
-import cc.dooq.data.dto.DataUpdateDTO;
-import cc.dooq.data.dto.PaginationDTO;
+import cc.dooq.data.dto.*;
 import cc.dooq.data.service.DataService;
 import cc.dooq.data.util.DataResult;
 import cc.dooq.data.vo.DataInfoVO;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 蛋清
@@ -30,11 +34,11 @@ public class DataController {
 
     /**
      * 删除行数据，只能按行删，不能按数据删
-     * @param rowId
+     * @param rowIds
     */
     @PostMapping("/remove_row_data")
-    public DataResult<Boolean> removeRowData(@RequestParam("rowId") Long rowId){
-        return dataService.removeRowData(rowId);
+    public DataResult<Boolean> removeRowData(@RequestBody List<Long> rowIds){
+        return dataService.removeRowData(rowIds);
     }
 
     /**

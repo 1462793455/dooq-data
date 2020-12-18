@@ -50,6 +50,7 @@ public enum DataResultCode {
     PAGE_INFO_NOT_NULL_ERROR("分页数据错误",10039),
     CONDITION_NOT_NULL_ERROR("条件不存在",10040),
     CONDITION_INCOMPLETE_ERROR("条件参数不完整",10041),
+    NOT_PARAM("没有任何数据",10042),
     ;
 
     /** 错误提示 */

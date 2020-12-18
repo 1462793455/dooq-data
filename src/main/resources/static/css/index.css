@@ -16,14 +16,21 @@ body{
     height: 100%;
     /*padding: 0px 20px;*/
     overflow: hidden;
+    background-image: url("https://pannss.bdstatic.com/box-static/disk-theme/theme/pinkrabbit/img/main_bg.png");
+    background-size: 100%;
+}
+
+.main-warp{
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .main-view-item-left{
-    width: 270px;
+    width: 15%;
     height: 100%;
-    background-color: white;
-    border-right: 1px solid #e4e4e4;
-    padding: 10px 15px;
+    /*background-color: white;*/
+    /*border-right: 1px solid #e4e4e4;*/
+    padding: 13px 15px;
 }
 
 .main-view-item-left .el-input--mini .el-input__inner {
@@ -32,17 +39,18 @@ body{
 }
 
 .main-view-item-right{
-    width: 100%;
-    padding: 0px 20px;
+    width: 85%;
+    /*padding: 0px 20px;*/
+    padding-right: 20px;
 }
 
 .header-view{
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .footer-view{
     width: 100%;
-    height: 60px;
+    height: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -65,9 +73,9 @@ body{
 
 .header-button{
     font-size: 12px;
-    padding: 3px 10px;
+    /*padding: 3px 10px;*/
     color: #595959;
-    height: 24px;
+    /*height: 24px;*/
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
@@ -75,11 +83,12 @@ body{
 
 .header-button1{
     font-size: 12px!important;
-    padding: 3px 10px!important;
-    height: 24px!important;
+    /*padding: 3px 10px!important;*/
+    /*height: 24px!important;*/
     border-radius: 3px!important;
     cursor: pointer!important;
     user-select: none!important;
+    margin-right: 5px;
 }
 
 .header-button:hover{
@@ -177,29 +186,10 @@ input[type="number"] {
     height: 24px!important;
 }
 
-.data-filter-view .el-input{
-    width: 120px;
-}
-
-.data-filter-view::-webkit-scrollbar {/*滚动条整体样式*/
-    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
-    height: 5px;
-}
-.data-filter-view::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
-    background: #535353;
-}
-.data-filter-view::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
-    border-radius: 10px;
-    background: #EDEDED;
-}
-
-.create-date-body  .el-form-item__label{
-    width: 55px!important;
-    line-height: 15px!important;
-}
+/*.create-date-body  .el-form-item__label{*/
+/*    width: 55px!important;*/
+/*    line-height: 15px!important;*/
+/*}*/
 
 /*.left-form-item .el-form-item__label-wrap{*/
 /*    width: 50px;*/
@@ -214,3 +204,117 @@ input[type="number"] {
 /*    text-overflow: ellipsis;*/
 /*    white-space: nowrap;*/
 /*}*/
+
+.header-left-view{
+    /*background-color: darkblue;*/
+    width: 17%;
+}
+.header-right-view{
+    display: flex;
+    width: 18%;
+    justify-content: flex-end;
+}
+
+.header-button-delete{
+    background-color: #FF3535;
+    color: white;
+    border-color: #FF3535;
+}
+
+.footer-left-view{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.footer-select-data-length{
+    font-size: 13px;
+    line-height: 32px;
+    color: white;
+    margin-left: 10px;
+}
+
+.footer-right-view{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-center-view{
+
+    /*height: 10px;*/
+    display: flex;
+    justify-content: center;
+    max-width: 65%;
+}
+
+.header-center-input-view{
+    /*max-width: 1000px;*/
+    overflow-x: auto;
+    overflow-x: auto;
+    margin-right: 5px;
+    height: 105%;
+    /*margin-top: 3px;*/
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-center-input-view::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 5px;
+}
+.header-center-input-view::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
+    background: #535353;
+}
+.header-center-input-view::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+.vxe-table--body-wrapper::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 10px;
+}
+.vxe-table--body-wrapper::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px #ff70ab;
+    background: #ff70ab;
+}
+.vxe-table--body-wrapper::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(239, 239, 239, 0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+.header-center-input-view .el-input__inner{
+    /*height: 24px;*/
+    font-size: 12px;
+}
+
+.header-center-input-view .el-input{
+    margin-right: 5px;
+    width: 120px;
+    display: inline-block;
+}
+
+.header-center-input-view .el-form--inline .el-form-item{
+    margin-right: 0px;
+}
+
+.input-separate{
+    width: 20px;text-align: center;font-size: 12px;line-height: 24px;
+}
+
+.filter-option-item .el-checkbox__label{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 110px;
+    font-size: 12px;
+    line-height: 11px;
+}
+
+.filter-option-item .el-checkbox__input{
+    line-height: 25px;
+}
