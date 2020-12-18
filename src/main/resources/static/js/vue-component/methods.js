@@ -301,6 +301,41 @@ function methods() {
             });
         },
 
+        // 筛选字段展示切换函数
+        checkShowFilterCheckBoxFunction(filterSelectedArr){
+
+            // 1. 重置
+            vm.originalColumn.forEach(columnItem => {
+                columnItem["showFilter"] = false;
+            })
+
+            if(filterSelectedArr){
+                filterSelectedArr.forEach(item => {
+                    vm.originalColumn.forEach(columnItem => {
+                        if(columnItem.field == item.field){
+                            columnItem["showFilter"] = true;
+                        }
+                    })
+                });
+            }
+
+            let originalColumnJson = {};
+            // 将 originalColumn 数据 转换 map 存储
+            vm.originalColumn.forEach(columnItem => {
+                originalColumnJson["field" + columnItem.field] = columnItem["showFilter"] || false;
+            })
+
+            // 记录缓存，下次接着用
+            localStorage.setItem(vm.currSelectViewInfo.viewId + "#ShowFilter",JSON.stringify(originalColumnJson));
+
+        },
+        // 切换列展示
+        checkColumnVisibleCheckBoxFunction(columnVisibleArrays){
+
+
+
+        },
+
         // 切换编辑模式 mode = true 代表 添加数据
         //                     false 代表修改数据 不同点在于，修改数据 rowId 必填
         // 并打开数据编辑框

@@ -52,6 +52,9 @@ function $checkView(viewInfo){
         return;
     }
 
+    // 清除数据
+    clearViewData();
+
     // 1. 切换视图信息
     vm.currSelectViewInfo = viewInfo;
     // 2. 刷新字段
@@ -59,6 +62,21 @@ function $checkView(viewInfo){
     // 3. 刷新数据
     getColumnDataFunction();
 
+    // 记录当前视图，下次进入网页自动切入到当前视图
+    localStorage.setItem("currSelectedView",JSON.stringify(vm.currSelectViewInfo));
+
+}
+
+// 清除上一个视图的数据
+function clearViewData(){
+
+    vm.editData = getEditData();
+    vm.selectData = getDefaultSelectData();
+    vm.editRowId = null;
+    vm.editMode = 0;
+    vm.originalColumn = [];
+    vm.selectedRowDataArrays = [];
+    vm.checkShowFilterCheckBoxArray = [];
 }
 
 // 刷新字段
@@ -141,7 +159,17 @@ function assembleFieldInfo(fieldInfo){
         // 字段宽度
         let fieldWidth = fieldInfo.fieldWidth;
 
-        return  {field: fieldInfo.id,showFilter:false, title: fieldName, width: fieldWidth ,editRender: { name: rendererName  }};
+        let showFilter = false;
+        try{
+            let showFilterColumnStr = localStorage.getItem(vm.currSelectViewInfo.viewId + "#ShowFilter");
+            if(showFilterColumnStr){
+                let showFilterColumnJSON = JSON.parse(showFilterColumnStr);
+                showFilter = showFilterColumnJSON["field" + fieldInfo.id] || false;
+            }
+       }catch (e) {}
+
+        // 设置参数
+        return  {field: fieldInfo.id,showFilter:showFilter, title: fieldName, width: fieldWidth ,editRender: { name: rendererName  }};
 
     }catch (e) {
 

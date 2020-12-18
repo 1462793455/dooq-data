@@ -54,13 +54,13 @@ function textRenderFilter(h, renderOpts, {column}) {
         template: `<div class="filter-body text-filter-body">
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item style="width: 100%">
-                                        <el-input @change="changeText" v-model="value" :placeholder="title + ' 筛选'"></el-input>
+                                        <el-input @change="changeText" v-model="value" :placeholder="'请输入' + title"></el-input>
                                     </el-form-item>
                                 </el-form>
                             </div>`,
         data: function () {
             return {
-                value :null,
+                value :vm.selectData.filter[column.field] ? vm.selectData.filter[column.field].text : null,
                 title:column.title,
             }
         },
@@ -210,11 +210,11 @@ function initNumberRenderer() {
                 template: `<div class="filter-body number-filter-body">
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item >
-                                        <el-input v-model="startNumber" @change="changeStartNumber" type="number" :placeholder="title + '开始范围'"></el-input>
+                                        <el-input v-model="startNumber" @change="changeStartNumber" type="number" :placeholder="'请输入' + title + '开始范围'"></el-input>
                                     </el-form-item>
                                     <div class="input-separate" >到</div>
                                     <el-form-item>
-                                        <el-input v-model="endNumber" @change="changeEntNumber" type="number" :placeholder="title + '结束范围'"></el-input>
+                                        <el-input v-model="endNumber" @change="changeEntNumber" type="number" :placeholder="'请输入' + title + '结束范围'"></el-input>
                                     </el-form-item>
                                 </el-form>
                             </div>`,
@@ -414,19 +414,27 @@ function initDateTimeRenderer() {
             if (!row[column.property]) {
                 return DEFAULT_TEXT;
             }
-            return dateFormat(row[column.property], "Y-m-d h:i:s");
+            let template = {
+                template: '<div><icon style="margin-right: 3px" class="el-icon-alarm-clock"></icon> {{value}}</div>',
+                data: function () {
+                    return {
+                        value: dateFormat(row[column.property], "Y-m-d h:i:s"),
+                    }
+                },
+            }
+            return [h(template)];
         },
         // 筛选模板 结束不能比开始小
         renderFilter(h, renderOpts, {column}) {
             let template = {
-                template: `<div style="margin-right: 5px;" class="filter-body number-filter-body">
+                template: `<div class="filter-body number-filter-body">
                                 <el-form style="display: flex;justify-content: space-between;" size="mini" :inline="true">
                                     <el-form-item >
-                                       <el-date-picker value-format="timestamp" @change="customStartDateChange" v-model="startTime" type="datetime" :placeholder="title + '开始时间'"> </el-date-picker>
+                                       <el-date-picker value-format="timestamp" @change="customStartDateChange" v-model="startTime" type="datetime" :placeholder=" '请输入' +  title + '开始时间'"> </el-date-picker>
                                     </el-form-item>
                                     <div class="input-separate">到</div>
                                     <el-form-item>
-                                        <el-date-picker value-format="timestamp" @change="customEndDateChange" v-model="endTime" type="datetime" :placeholder="title + '结束时间'"> </el-date-picker>
+                                        <el-date-picker value-format="timestamp" @change="customEndDateChange" v-model="endTime" type="datetime" :placeholder=" '请输入' + title + '结束时间'"> </el-date-picker>
                                     </el-form-item>
                                 </el-form>
                             </div>`,

@@ -10,20 +10,29 @@
             (
                 SELECT
                     row_id,
-                    (if(
+                    SUM(if(
                         <foreach separator="or" collection="fieldList" item="fieldId">
                             field_id = #{fieldId}
                         </foreach>
                     ,1,0) +
                     if(
                         <foreach separator="or" collection="conditionList" item="value">
-                            ( ${value} )
+                            (
+                                (
+                                    <foreach separator="or" collection="fieldList" item="fieldId">
+                                        field_id = #{fieldId}
+                                    </foreach>
+                                )
+                            and
+                            ${value}
+                            )
                         </foreach>
                     ,1,0)) as number
                 from
                     t_column_data
                 where
                     view_id = #{viewId}
+                GROUP BY row_id
             ) as column_data
         where number >= ${fieldList.size + conditionList.size}
         limit #{param4.pageNumber},#{param4.pageSize}
@@ -38,19 +47,28 @@
         (
         SELECT
         row_id,
-        (if(
+        SUM(if(
             <foreach separator="or" collection="fieldList" item="fieldId">
                 field_id = #{fieldId}
             </foreach>
         ,1,0) +
-        if(
-        <foreach separator="or" collection="conditionList" item="value">
-            ( ${value} )
-        </foreach>
-        ,1,0)) as number
+            if(
+            <foreach separator="or" collection="conditionList" item="value">
+                (
+                    (
+                        <foreach separator="or" collection="fieldList" item="fieldId">
+                            field_id = #{fieldId}
+                        </foreach>
+                    )
+                    and
+                    ${value}
+                )
+            </foreach>
+            ,1,0)) as number
         from
         t_column_data
         where view_id = #{viewId}
+        GROUP BY row_id
         ) as column_data
         where number >= ${fieldList.size + conditionList.size}
     </select>

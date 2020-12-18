@@ -17,7 +17,7 @@
 
 
 .vxe-cell .el-input-number,.el-date-editor{
-    width: 100%!important;
+    width: 150px!important;
 }
 
 .vxe-table .is--checked.vxe-cell--checkbox .vxe-checkbox--icon:before{
@@ -26,20 +26,20 @@
 }
 
 .vxe-custom--option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-export--panel-column-option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-table--filter-option:not(.is--disabled):hover .vxe-checkbox--icon:before, .vxe-table .vxe-cell--checkbox:not(.is--disabled):hover .vxe-checkbox--icon:before{
-    border-color: #ffa0c7;
+    border-color: #ff70ab;
 }
 
 .vxe-table.column--highlight .vxe-header--column:not(.col--seq):hover{
-    background-color: #fcc2da;
-    color: white;
+    background-color: #fff1f7!important;
+    color: #333;
 }
 
 .vxe-table .vxe-body--column.col--current, .vxe-table .vxe-body--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-footer--column.col--current, .vxe-table .vxe-footer--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-header--column.col--current, .vxe-table .vxe-header--column.col--current .vxe-tree--btn-wrapper{
     background-color: #fcc2da;
 }
 .vxe-table .vxe-body--row.row--current{
-    background-color: #fcc2da!important;
-    color: white;
+    background-color: #fff1f7!important;
+    color: #333;
 }
 
 .is--checked.vxe-custom--option .vxe-checkbox--icon:before, .is--checked.vxe-export--panel-column-option .vxe-checkbox--icon:before, .is--checked.vxe-table--filter-option .vxe-checkbox--icon:before, .is--indeterminate.vxe-custom--option .vxe-checkbox--icon:before, .is--indeterminate.vxe-export--panel-column-option .vxe-checkbox--icon:before, .is--indeterminate.vxe-table--filter-option .vxe-checkbox--icon:before, .vxe-table .is--checked.vxe-cell--checkbox .vxe-checkbox--icon:before, .vxe-table .is--indeterminate.vxe-cell--checkbox .vxe-checkbox--icon:before{
@@ -48,15 +48,24 @@
 }
 
 .vue-table .vue-body--row.row--hover.row--current{
-    background-color: #fcc2da;
-    color: white;
+    background-color: #fff1f7;
+    color: #333;
 }
 
 .vxe-table .vxe-body--column.col--current, .vxe-table .vxe-body--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-footer--column.col--current, .vxe-table .vxe-footer--column.col--current .vxe-tree--btn-wrapper, .vxe-table .vxe-header--column.col--current, .vxe-table .vxe-header--column.col--current .vxe-tree--btn-wrapper{
-    background-color: #fcc2da;
-    color: white;
+    background-color: #fff1f7;
+    color: #333;
 }
 
 .vxe-table.border--full .vxe-header--column{
     background-image: linear-gradient(#e8eaec,#e8eaec),linear-gradient(#ffffff,#ececec);
+}
+
+.vxe-table.border--full .vxe-body--column, .vxe-table.border--full .vxe-footer--column, .vxe-table.border--full .vxe-header--column{
+    background-image: linear-gradient(#f0f0f0,#f0f0f0),linear-gradient(#f0f0f0,#f0f0f0);
+}
+
+.table-header-custom-style{
+    background-color: white;
+    color: #626262;
 }

@@ -19,6 +19,7 @@
 
     <!--  添加数据 dialog  -->
     <el-dialog
+            :lock-scroll="false"
             :close-on-click-modal="false"
             :title="getEditModeStr() + '数据'"
             :visible.sync="editDataDialog"
@@ -75,6 +76,7 @@
     <!--  添加新字段 dialog  -->
     <el-dialog
             title="添加新字段"
+            :lock-scroll="false"
             :visible.sync="createFieldDialogVisible"
             :close-on-click-modal="false"
             width="400px"
@@ -249,67 +251,74 @@
             </div>
         </div>
         <div class="main-view-item-right">
-            <div class="header-view">
-                <div v-if="currSelectViewInfo != null" class="header-warp">
-                    <div class="header-left-view" >
-                        <!--       添加新字段 只有在选择好视图时才会展示         -->
-                        <el-button v-if="currSelectViewInfo != null" class="el-dropdown-link header-button"
-                                   @click="createFieldDialogVisible = true" size="mini" icon="el-icon-circle-plus">添加新字段
-                        </el-button>
-                        <!--      添加新数据，只有在当前视图存在字段时展示     -->
-                        <el-button v-if="gridOptions.columns.length > 0" class="el-dropdown-link header-button"
-                                   @click="checkEditMode(0)" size="mini" icon="el-icon-circle-plus">添加数据
-                        </el-button>
-                    </div>
-                    <div class="header-center-view">
-                        <div class="header-center-input-view">
-                            <div v-if="item.showFilter" class="" v-for="(item,index) in originalColumn">
-                                {{ renderFilter( $createElement, item ) }}
-                                <slot :name="item.field"></slot>
+<!--           header main 合并 -->
+            <div class="main-view">
+                <div class="header-view">
+                    <div v-if="currSelectViewInfo != null" class="header-warp">
+                        <div class="header-left-view" >
+                            <!--       添加新字段 只有在选择好视图时才会展示         -->
+                            <el-button plain type="primary" v-if="currSelectViewInfo != null" class="el-dropdown-link header-button"
+                                       @click="createFieldDialogVisible = true" size="mini" icon="el-icon-circle-plus">添加新字段
+                            </el-button>
+                            <!--      添加新数据，只有在当前视图存在字段时展示(大于2 是因为有两个系统列)     -->
+                            <el-button plain type="primary" v-if="originalColumn.length > 2" class="el-dropdown-link header-button"
+                                       @click="checkEditMode(0)" size="mini" icon="el-icon-circle-plus">添加数据
+                            </el-button>
+                        </div>
+                        <div class="header-center-view">
+                            <div class="header-center-input-view">
+                                <div v-if="item.showFilter" v-for="(item,index) in originalColumn">
+                                    {{ renderFilter( $createElement, item ) }}
+                                    <slot :name="item.field"></slot>
+                                </div>
+                            </div>
+                            <div v-if="checkShowFilterCheckBoxArray.length > 0">
+                                <el-button  @click="filterColumnDate" class="header-button1" type="primary"  size="mini">
+                                    <i class="el-icon-view" style="margin-right: 5px"></i>筛选</el-button>
+                                <el-button v-if="selectData.filter.length != 0" @click="resetFilterColumnData" class="header-button1" size="mini">
+                                    <i class="el-icon-turn-off" style="margin-right: 5px"></i>
+                                    重置</el-button>
                             </div>
                         </div>
-                        <div v-id="">
-                            <el-button @click="filterColumnDate" class="header-button1" type="primary"  size="mini">
-                                <i class="el-icon-view" style="margin-right: 5px"></i>筛选</el-button>
-                            <el-button v-if="selectData.filter.length != 0" @click="resetFilterColumnData" class="header-button1" size="mini">
-                                <i class="el-icon-turn-off" style="margin-right: 5px"></i>
-                                重置</el-button>
+<!--                         大于2是因为有两个系统列-->
+                        <div v-if="originalColumn.length > 2" class="header-right-view">
+                            <el-popover
+                                    placement="bottom-end"
+                                    width="120"
+                                    trigger="click">
+                                <el-button plain type="primary" slot="reference" class="header-button1" size="mini">
+                                    筛选设置<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+
+                                <div class="filter-options-list">
+                                    <el-checkbox-group @change="checkShowFilterCheckBoxFunction" v-model="checkShowFilterCheckBoxArray">
+                                        <el-checkbox :checked="item.showFilter" v-if="!item.system" class="filter-option-item" v-for="(item,index) in originalColumn" :label="item" :key="index">{{item.title}}</el-checkbox>
+                                    </el-checkbox-group>
+
+                                </div>
+
+                            </el-popover>
+                            <el-popover
+                                    placement="bottom-end"
+                                    width="120"
+                                    trigger="click">
+                                <el-button plain type="primary" slot="reference" class="header-button1" size="mini">
+                                    列设置<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+
+                                <div class="filter-options-list">
+                                    <el-checkbox-group @change="checkColumnVisibleCheckBoxFunction" v-model="checkColumnVisibleCheckBoxArray">
+                                        <el-checkbox v-model="item.visible" v-if="!item.system" class="filter-option-item" v-for="(item,index) in gridOptions.columns" :label="item" :key="index">{{item.title}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </div>
+
+                            </el-popover>
                         </div>
-                    </div>
-                    <div class="header-right-view">
-                        <el-popover
-                                placement="bottom-end"
-                                width="120"
-                                trigger="click">
-                            <el-button slot="reference" class="header-button1" size="mini">
-                                筛选设置<i class="el-icon-arrow-down el-icon--right"></i>
-                            </el-button>
-
-                            <div class="filter-options-list">
-                                <el-checkbox v-model="item.showFilter" v-if="!item.system" class="filter-option-item" v-for="(item,index) in originalColumn" :label="item.title" :key="index">{{item.title}}</el-checkbox>
-                            </div>
-
-                        </el-popover>
-                        <el-popover
-                                placement="bottom-end"
-                                width="120"
-                                trigger="click">
-                            <el-button slot="reference" class="header-button1" size="mini">
-                                列设置<i class="el-icon-arrow-down el-icon--right"></i>
-                            </el-button>
-
-                            <div class="filter-options-list">
-                                <el-checkbox v-model="item.visible" v-if="!item.system" class="filter-option-item" v-for="(item,index) in gridOptions.columns" :label="item.title" :key="index">{{item.title}}</el-checkbox>
-                            </div>
-
-                        </el-popover>
                     </div>
                 </div>
-            </div>
-            <!--clientHeight - 105-->
-            <div class="main-view">
                 <div class="main-warp">
                     <vxe-grid
+                             header-row-class-name="table-header-custom-style"
                               @cell-dblclick="checkEditMode(1,$event.row.rowId)"
                               @checkbox-range-change="gridOptions.checkboxRangeChange"
                               @checkbox-all="gridOptions.checkboxAll"

@@ -62,7 +62,7 @@
 
 .number-filter-body .el-form-item{
     margin-right: 5px;
-    width: 120px;
+    /*width: 120px;*/
 }
 
 .text-filter-body .el-form-item__content{
@@ -80,4 +80,8 @@
     font-weight: 600;
     color: #6e6e6e;
     line-height: 30px;
+}
+
+.create-date-body .el-date-editor{
+    width: 100%!important;
 }

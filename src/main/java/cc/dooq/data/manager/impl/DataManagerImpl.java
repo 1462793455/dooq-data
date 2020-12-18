@@ -87,7 +87,8 @@ public class DataManagerImpl implements DataManager {
     /**
      * 创建 Column 数据 并返回创建结果
     */
-    private DataResult createColumnData(Long viewId, Long rowId, List<DataInfoDTO> dataInfoList) {
+    @Transactional(rollbackFor = Exception.class)
+    public DataResult createColumnData(Long viewId, Long rowId, List<DataInfoDTO> dataInfoList) {
 
         // 获得该视图下所有合法的字段信息
         List<FieldDO> fieldList =
@@ -123,7 +124,7 @@ public class DataManagerImpl implements DataManager {
 
             // 插入 column data
             int insertCount = columnDataMapper.insert(columnDataInfo);
-            if(insertCount < 0){
+            if(insertCount <= 0){
                 // 回滚
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 // 插入失败

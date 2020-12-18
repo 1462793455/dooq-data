@@ -22,6 +22,13 @@ function init(){
     // 初始化所有 Renderer
     initRenderer();
 
+    // 如果存在打开的视图则直接切换进入
+    let currSelectedViewStr = localStorage.getItem("currSelectedView");
+    if(currSelectedViewStr){
+        let currSelectedViewJson = JSON.parse(currSelectedViewStr);
+        // 切换
+        $checkView(currSelectedViewJson);
+    }
 }
 
 // 监听页面高度变化

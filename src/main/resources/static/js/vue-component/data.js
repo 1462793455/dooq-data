@@ -25,10 +25,7 @@ function data() {
         // 添加新数据模态框 展示控制变量
         editDataDialog:false,
         // 正在编辑的数据，其中对象固定 {viewId:"视图ID",fields:[{fieldId:"所属字段Id","value":"数据值"}]  }
-        editData:{ // dataInput 方法 在操作
-            viewId:null, // 视图ID
-            fields:[] // 修改的字段、值信息
-        },
+        editData:getEditData(),
         // 查询条件存储
         selectData: getDefaultSelectData(),
         // 表格数据加载状态
@@ -41,22 +38,22 @@ function data() {
             totalPage:null,         // 页总数
             totalDataCount:null,    // 数据总数
         },
-        // 筛选字段列表
-        filterColumnList:null,
         // 编辑模式  0 : 添加 1: 修改 2：查看
         editMode: 0,
         // 当前编辑行ID
         editRowId:null,
         // 原始 字段配置
         originalColumn:[],
-        // 选择筛选字段
-        filterColumnSelect:null,
         // 当前选中的数据
         selectedRowDataArrays:[],
+        // 筛选字段展示数组
+        checkShowFilterCheckBoxArray:[],
+        // 列展示字段数据
+        checkColumnVisibleCheckBoxArray:[],
         // 单元格配置
         gridOptions: {
             // 表格大小
-            size:"mini",
+            size:"small",
             // 是否需要边框
             border: true,
             // 列宽是否允许调整
@@ -172,4 +169,13 @@ function data() {
         },
 
     }
+}
+
+
+function getEditData(){
+    return {
+        // dataInput 方法 在操作
+        viewId:null, // 视图ID
+        fields:[] // 修改的字段、值信息
+    };
 }
