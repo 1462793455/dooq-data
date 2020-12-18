@@ -31,7 +31,7 @@
                 from
                     t_column_data
                 where
-                    view_id = #{viewId}
+                    view_id = #{viewId} and status = 1
                 GROUP BY row_id
             ) as column_data
         where number >= ${fieldList.size + conditionList.size}
@@ -67,7 +67,7 @@
             ,1,0)) as number
         from
         t_column_data
-        where view_id = #{viewId}
+        where view_id = #{viewId} and status = 1
         GROUP BY row_id
         ) as column_data
         where number >= ${fieldList.size + conditionList.size}

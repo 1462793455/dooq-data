@@ -97,72 +97,22 @@
             </el-form-item>
             <el-form-item v-if="fieldCreateInfo.fieldTypeInfo != null && fieldCreateInfo.fieldTypeInfo.isEnum == true"
                           required="true" label="数据源">
-                <el-popover
-                        placement="right-start"
-                        title=""
-                        width="205"
-                        trigger="click">
-                    <el-button slot="reference">选择数据源 <i class="el-icon-arrow-right"></i></el-button>
-                    <div class="data-source-view">
-                        <div class="data-source-header">
-                            <div>
-                                <el-input placeholder="输入数据源名称" v-model="input3" class="input-with-select">
-                                    <el-button slot="append" icon="el-icon-search"></el-button>
-                                </el-input>
-                            </div>
-                            <div>
-                                <i @click="createDataSourceDialog = true" style="cursor: pointer;"
-                                   class="el-icon-circle-plus-outline"></i>
-                            </div>
-                        </div>
-                        <div class="data-source-content">
-                            <div class="data-source-list view-list-context">
-                                <!--                                如果存在选中，则第一个就是-->
-                                <div class="data-source-item view-list-item select-view-style">
-                                    <div class="view-list-item-left">
-                                        <div>当前选中的数据源</div>
-                                    </div>
-                                    <div class="view-list-item-right">
-                                        <div>
-                                            <i style="margin-right: 2px" class="el-icon-view"></i>
-                                            <i style="margin-right: 2px" class="el-icon-edit-outline"></i>
-                                            <i class="el-icon-circle-close"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--                                如果存在选中，则这个列表中需要排除掉-->
-                                <div v-for="item in 5" class="data-source-item view-list-item ">
-                                    <div class="view-list-item-left">
-                                        <div>测试数据源{{item}}</div>
-                                    </div>
-                                    <div class="view-list-item-right">
-                                        <div>
-                                            <i style="margin-right: 2px" class="el-icon-view"></i>
-                                            <i style="margin-right: 2px" class="el-icon-edit-outline"></i>
-                                            <i class="el-icon-circle-close"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </el-popover>
+                <el-select
+                        v-model="value"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择文章标签">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-button >保存数据源</el-button>
             </el-form-item>
-<!--            <el-form-item label="字段背景色">-->
-<!--                <div class="color-list-body">-->
-<!--                    <div @click="fieldCreateInfo.fieldColorCode = item.colorCode"-->
-<!--                         v-for="item in colorList"-->
-<!--                         :class="'color-list-item ' + (fieldCreateInfo.fieldColorCode != null && fieldCreateInfo.fieldColorCode == item.colorCode ? 'selectFieldColor' : '')"-->
-<!--                         :style="'background-color: ' + item.color"></div>-->
-<!--                </div>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item label="是否固定">-->
-<!--                <el-radio-group v-model="fieldCreateInfo.fixed">-->
-<!--                    <el-radio border :label="1">固定</el-radio>-->
-<!--                    <el-radio border :label="0">不固定</el-radio>-->
-<!--                </el-radio-group>-->
-<!--            </el-form-item>-->
         </el-form>
 
         <span slot="footer" class="dialog-footer">
@@ -261,7 +211,7 @@
                                        @click="createFieldDialogVisible = true" size="mini" icon="el-icon-circle-plus">添加新字段
                             </el-button>
                             <!--      添加新数据，只有在当前视图存在字段时展示(大于2 是因为有两个系统列)     -->
-                            <el-button plain type="primary" v-if="originalColumn.length > 2" class="el-dropdown-link header-button"
+                            <el-button type="primary" v-if="originalColumn.length > 2" class="el-dropdown-link header-button"
                                        @click="checkEditMode(0)" size="mini" icon="el-icon-circle-plus">添加数据
                             </el-button>
                         </div>

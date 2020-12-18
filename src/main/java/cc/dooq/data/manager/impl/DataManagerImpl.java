@@ -632,6 +632,7 @@ public class DataManagerImpl implements DataManager {
 
             // 删除
             int deleteCount = rowDataMapper.deleteBatchIds(rowIds);
+            columnDataMapper.delete(new QueryWrapper<ColumnDataDO>().in("row_id", rowIds));
 
             if(deleteCount != rowIds.size()){
                 // 回滚

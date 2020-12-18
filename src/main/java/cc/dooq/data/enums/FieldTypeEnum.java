@@ -16,7 +16,7 @@ public enum FieldTypeEnum {
 //    URL(6,"超链接"),
 //    DATE(7,"日期","custom-date"),
 //    TIME(8,"时间","custom-time"),
-    DATE_TIME(9,"日期时间","custom-date-time"),
+    DATE_TIME(9,"日期","custom-date-time"),
 
     ;
 

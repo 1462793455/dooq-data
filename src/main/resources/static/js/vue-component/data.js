@@ -40,6 +40,7 @@ function data() {
         },
         // 编辑模式  0 : 添加 1: 修改 2：查看
         editMode: 0,
+        value:null,
         // 当前编辑行ID
         editRowId:null,
         // 原始 字段配置
