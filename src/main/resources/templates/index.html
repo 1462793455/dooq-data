@@ -2,7 +2,7 @@
 <html lang="en" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>数据管理</title>
     <!-- import CSS -->
 <!--    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">-->
     <link rel="stylesheet" href="/static/css/external/element-ui/index.css"  />
@@ -295,7 +295,7 @@
                         <el-popconfirm
                                 v-if="selectedRowDataArrays.length > 0"
                                 title="确定删除这些数据吗？"
-                                @onConfirm="batchRemoveRowData()">
+                                @confirm="batchRemoveRowData()">
                             <el-button slot="reference" type="danger" class="el-dropdown-link header-button-delete"
                                        size="mini" icon="el-icon-delete">批量删除数据 {{selectedRowDataArrays.length}} 条
                             </el-button>
@@ -332,7 +332,7 @@
 <!-- table renderers -->
 <script src="/static/js/table/renderers.js"></script>
 <!-- import JavaScript -->
-<script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
+<script src="/static/js/external/element-ui/index.js"></script>
 <!-- jquery -->
 <script src="/static/js/external/jquery/jquery.min.js"></script>
 <!-- vxe-table -->

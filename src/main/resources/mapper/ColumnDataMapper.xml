@@ -3,6 +3,9 @@
 <mapper namespace="cc.dooq.data.mapper.ColumnDataMapper">
 
     <select id="selectColumnDataRowIdList" resultType="long">
+
+        select row_id from (
+
         select
             row_id,
             number
@@ -10,6 +13,7 @@
             (
                 SELECT
                     row_id,
+                    status,
                     SUM(if(
                         <foreach separator="or" collection="fieldList" item="fieldId">
                             field_id = #{fieldId}
@@ -34,43 +38,49 @@
                     view_id = #{viewId} and status = 1
                 GROUP BY row_id
             ) as column_data
-        where number >= ${fieldList.size + conditionList.size}
+        where number >= ${fieldList.size + conditionList.size} and status = 1
+        ) column_data left join t_row_data on column_data.row_id = t_row_data.id where t_row_data.status = 1
+
+
         limit #{param4.pageNumber},#{param4.pageSize}
 
     </select>
 
 
     <select id="selectColumnDataRowIdCount" resultType="long">
+
+        select count(row_id) from (
+
         select
-        count(row_id)
+            row_id
         from
         (
         SELECT
         row_id,
         SUM(if(
+        <foreach separator="or" collection="fieldList" item="fieldId">
+            field_id = #{fieldId}
+        </foreach>
+        ,1,0) +
+        if(
+        <foreach separator="or" collection="conditionList" item="value">
+            (
+            (
             <foreach separator="or" collection="fieldList" item="fieldId">
                 field_id = #{fieldId}
             </foreach>
-        ,1,0) +
-            if(
-            <foreach separator="or" collection="conditionList" item="value">
-                (
-                    (
-                        <foreach separator="or" collection="fieldList" item="fieldId">
-                            field_id = #{fieldId}
-                        </foreach>
-                    )
-                    and
-                    ${value}
-                )
-            </foreach>
-            ,1,0)) as number
+            )
+            and
+            ${value}
+            )
+        </foreach>
+        ,1,0)) as number
         from
         t_column_data
         where view_id = #{viewId} and status = 1
         GROUP BY row_id
         ) as column_data
-        where number >= ${fieldList.size + conditionList.size}
+        where number >= ${fieldList.size + conditionList.size} ) column_data left join t_row_data on column_data.row_id = t_row_data.id where t_row_data.status = 1
     </select>
 
 </mapper>

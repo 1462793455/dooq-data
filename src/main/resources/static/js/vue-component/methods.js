@@ -100,6 +100,8 @@ function methods() {
         // 批量删除数据
         batchRemoveRowData(){
 
+            console.info("触发");
+
             // 得到当前批量选中的数据
             let selectedRowDataArrays = vm.selectedRowDataArrays;
             // 循环组装数据ID

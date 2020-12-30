@@ -127,7 +127,7 @@ function initSystemOperateRenderer() {
                 template: `<div style="display: flex;justify-content: space-between;">
 <!--                                <el-link :underline="false" @click="selectData" type="primary">查看</el-link>-->
                                 <el-link :underline="false" @click="editData" type="primary">编辑</el-link>
-                                <el-popconfirm @onConfirm="removeRowData" title="确定删除这些数据吗？">
+                                <el-popconfirm @confirm="removeRowData()" title="确定删除这些数据吗？">
                                   <el-link slot="reference" :underline="false" type="danger">删除</el-link>
                                 </el-popconfirm>
                             </div>`,

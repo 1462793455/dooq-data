@@ -596,7 +596,7 @@ public class DataManagerImpl implements DataManager {
         if(rowIdList == null || rowIdList.isEmpty()){
             // 构建 Page 并返回
             Page<DataInfoVO> pageResult = new Page<>();
-            pageResult.setCurrent(paginationInfo.getPageNumber());
+            pageResult.setCurrent(pageInfo.getPageNumber());
             pageResult.setTotal(rowCount);
             pageResult.setSize(paginationInfo.getPageSize());
             pageResult.setRecords(null);
@@ -610,7 +610,7 @@ public class DataManagerImpl implements DataManager {
 
         // 构建 Page 并返回
         Page<DataInfoVO> pageResult = new Page<>();
-        pageResult.setCurrent(paginationInfo.getPageNumber());
+        pageResult.setCurrent(pageInfo.getPageNumber());
         pageResult.setTotal(rowCount);
         pageResult.setSize(paginationInfo.getPageSize());
 

@@ -124,11 +124,13 @@ public class PageUtil {
             return new PaginationDTO(1,20);
         }
 
+        PaginationDTO paginationDTO = new PaginationDTO(1,20);
+
         // 检查 pageInfo 参数，并修改成可以分页的参数
-        pageInfo.setPageSize(PageUtil.pageSize(pageInfo.getPageSize()));
-        pageInfo.setPageNumber(PageUtil.getStart(pageInfo.getPageNumber(),pageInfo.getPageSize()));
+        paginationDTO.setPageSize(PageUtil.pageSize(pageInfo.getPageSize()));
+        paginationDTO.setPageNumber(PageUtil.getStart(pageInfo.getPageNumber(),pageInfo.getPageSize()));
 
         // 返回结果
-        return pageInfo;
+        return paginationDTO;
     }
 }
